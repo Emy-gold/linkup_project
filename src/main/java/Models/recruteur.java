@@ -13,8 +13,8 @@ public class recruteur extends utilisateur{
     public recruteur() {
     }
 
-    public recruteur(int idUtilisateur, String email, String nom, String prenom, Date date, String statutCompte, String nomEntreprise, String secteurActivite, String descriptionEntreprise,String logo, String posteOccupe) {
-        super(idUtilisateur, email, nom, prenom, date, statutCompte);
+    public recruteur(int idUtilisateur, String email, String nom, String prenom,String password, Date date, String statutCompte, String nomEntreprise, String secteurActivite, String descriptionEntreprise,String logo, String posteOccupe,String role) {
+        super(idUtilisateur, email, nom, prenom,password, date, statutCompte,role);
         this.nomEntreprise = nomEntreprise;
         this.secteurActivite = secteurActivite;
         this.descriptionEntreprise = descriptionEntreprise;

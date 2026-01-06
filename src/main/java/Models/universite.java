@@ -12,8 +12,8 @@ public class universite extends utilisateur{
     public universite() {
     }
 
-    public universite(int idUtilisateur, String email, String nom, String prenom, Date date, String statutCompte, String nomUniversite, String adresse,String telephone, String emailContact) {
-        super(idUtilisateur, email, nom, prenom, date, statutCompte);
+    public universite(int idUtilisateur, String email, String nom, String prenom,String password, Date date, String statutCompte, String nomUniversite, String adresse,String telephone, String emailContact,String role) {
+        super(idUtilisateur, email, nom, prenom,password, date, statutCompte,role);
         this.nomUniversite = nomUniversite;
         this.adresse = adresse;
         this.telephone = telephone;

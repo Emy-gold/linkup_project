@@ -31,7 +31,7 @@
     </script>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 font-sans min-h-screen flex flex-col transition-colors duration-300">
-    <nav class="sticky top-0 z-50 background-blur-md bg-surface-light/80 border-b border-slate-200">
+    <nav class="sticky top-0 z-50 backdrop-blur-md bg-surface-light/80 border-b border-slate-200">
         <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex-shrink-0 flex items-center">
@@ -41,8 +41,8 @@
                             alt="linkup">
                 </div>
                 <div class="flex items-center space-x-4">
-                    <a class="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors pointer cursor-pointer">Log In </a>
-                    <a class="inline-flex items-center justify-center px-5 py-2 border-transparent text-sm font-medium rounded-full text-white bg-primary hover:bg-primary-dark transition-colors  shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary cursor-pointer"> Sign up</a>
+                    <a href="login.jsp" class="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors pointer cursor-pointer">Log In </a>
+                    <a href="signup.jsp" class="inline-flex items-center justify-center px-5 py-2 border-transparent text-sm font-medium rounded-full text-white bg-primary hover:bg-primary-dark transition-colors  shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary cursor-pointer"> Sign up</a>
                 </div>
             </div>
         </div>
@@ -57,10 +57,10 @@
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-green-400">Linked Up </span> To Success.</h1>
             <p class="text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-xl mx-auto mb-10 leading-relaxed" >The smarter way to navigate your career path. Connect with top employers and showcase your professional profile today.</p>
             <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                <a class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-primary hover:bg-primary-dark transition-all transform hover:-translate-y-0.5 shadow-lg hover:shadow-primary/30" href="#">
+                <a href="signup.jsp" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-primary hover:bg-primary-dark transition-all transform hover:-translate-y-0.5 shadow-lg hover:shadow-primary/30" href="#">
                     Sign Up Now
                 </a>
-                <a class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 border border-slate-300 dark:border-slate-600 text-base font-medium rounded-full text-slate-700 dark:text-slate-200 bg-surface-light dark:bg-surface-dark hover:bg-slate-50 dark:hover:bg-slate-700 transition-all" href="#">
+                <a href="login.jsp" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 border border-slate-300 dark:border-slate-600 text-base font-medium rounded-full text-slate-700 dark:text-slate-200 bg-surface-light dark:bg-surface-dark hover:bg-slate-50 dark:hover:bg-slate-700 transition-all" href="#">
                     Log In
                 </a>
             </div>

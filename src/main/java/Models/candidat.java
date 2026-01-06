@@ -9,8 +9,8 @@ public class candidat extends utilisateur{
 
     public candidat(){}
 
-    public candidat(int idUtilisateur, String email, String nom, String prenom, Date date, String statutCompte, String titreProfil , String disponibilite) {
-        super(idUtilisateur, email, nom, prenom, date, statutCompte);
+    public candidat(int idUtilisateur, String email, String nom, String prenom,String password, Date date, String statutCompte, String titreProfil , String disponibilite,String role) {
+        super(idUtilisateur,email, nom, prenom, password, date, statutCompte, role);
         this.titreProfil = titreProfil;
         this.disponibilite = disponibilite;
     }
