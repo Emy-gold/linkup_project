@@ -12,7 +12,7 @@
 </head>
 <body>
     <h2> Sign Up</h2>
-    <br action="signup" method="post">
+    <form action="signup" method="post">
         <label>Email: </label><br/>
         <input name="email" type="email" required/>
         <label>Nom: </label></br>
