@@ -12,14 +12,14 @@
 </head>
 <body>
     <h2> Sign Up</h2>
-    <form action="signup" method="post">
-        <label>Email: </label>
+    <br action="signup" method="post">
+        <label>Email: </label><br/>
         <input name="email" type="email" required/>
-        <label>Nom: </label>
+        <label>Nom: </label></br>
         <input name="nom" type="text" required/>
-        <label>Prenom: </label>
+        <label>Prenom: </label></br>
         <input name="prenom" type="text" required/>
-        <label>Password: </label>
+    <label>Password: </label></br>
         <input name="password" type="password"/>
 
         <select name="role">
@@ -28,7 +28,6 @@
             <option value="AGENT">Agent</option>
             <option value="ADMIN">Admin</option>
         </select>
-
         <button type="submit">Sign up</button>
     </form>
 </body>
