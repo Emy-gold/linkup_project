@@ -39,11 +39,11 @@ public class LoginServlet extends HttpServlet {
                    case "ADMIN":
                        resp.sendRedirect("Views/admin/dashboard.jsp");
                        break;
-                   case "AGENT":
+                   case "AGENT_UNIV":
                        resp.sendRedirect("Views/universite/dashboard.jsp");
                        break;
                    default:
-                       resp.sendRedirect("Views/login.jsp?error=invalid_role");
+                       resp.sendRedirect("/login.jsp?error=invalid_role");
                        break;
                }
            }else {
