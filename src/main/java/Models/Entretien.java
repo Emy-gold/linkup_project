@@ -8,16 +8,21 @@ public class Entretien {
     private String statutEntretien;
     private String notesRecruteur;
 
+    //foreign keys
+    private int candidatureId;
+
+
     public Entretien(){
 
     }
 
-    public Entretien(int id, String dateHeure, String lieu, String statutEntretien, String notesRecruteur) {
+    public Entretien(int id, String dateHeure, String lieu, String statutEntretien, String notesRecruteur,int candidatureId) {
         this.id = id;
         this.dateHeure = dateHeure;
         this.lieu = lieu;
         this.statutEntretien = statutEntretien;
         this.notesRecruteur = notesRecruteur;
+        this.candidatureId = candidatureId;
     }
 
     public int getId() {
@@ -40,6 +45,10 @@ public class Entretien {
         return statutEntretien;
     }
 
+    public int getCandidatureId() {
+        return candidatureId;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -58,5 +67,9 @@ public class Entretien {
 
     public void setStatutEntretien(String statutEntretien) {
         this.statutEntretien = statutEntretien;
+    }
+
+    public void setCandidatureId(int candidatureId) {
+        this.candidatureId = candidatureId;
     }
 }

@@ -11,18 +11,23 @@ public class Annonce {
     private String statutAnnonce;
     private Date datePublication;
 
+    //the foreign keys
+    private int recruteurId;
+
+
     public Annonce(){
 
     }
 
 
-    public Annonce(int id, String titre, String descriptionPoste, String typeContrat, String statutAnnonce, Date datePublication) {
+    public Annonce(int id, String titre, String descriptionPoste, String typeContrat, String statutAnnonce, Date datePublication, int recruteurId) {
         this.id = id;
         this.titre = titre;
         this.descriptionPoste = descriptionPoste;
         this.typeContrat = typeContrat;
         this.statutAnnonce = statutAnnonce;
         this.datePublication = datePublication;
+        this.recruteurId = recruteurId;
     }
 
     public int getId() {
@@ -49,6 +54,8 @@ public class Annonce {
         return statutAnnonce;
     }
 
+    public int getRecruteurId() {return recruteurId;}
+
     public void setId(int id) {
         this.id = id;
     }
@@ -71,5 +78,9 @@ public class Annonce {
 
     public void setTypeContrat(String typeContrat) {
         this.typeContrat = typeContrat;
+    }
+
+    public void setRecruteurId(int recruteurId) {
+        this.recruteurId = recruteurId;
     }
 }

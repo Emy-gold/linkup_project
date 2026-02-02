@@ -9,16 +9,21 @@ public class Candidature {
     private String statutCandidature;
     private String lettreMotivation;
 
-    public Candidature(){
+    // les foreign keys
+    private int candidatId;
+    private int annonceId;
 
+    public Candidature(){
     }
 
 
-    public Candidature(int id, Date dateSoumission, String statutCandidature, String lettreMotivation) {
+    public Candidature(int id, Date dateSoumission, String statutCandidature, String lettreMotivation, int candidatId, int annonceId) {
         this.id = id;
         this.dateSoumission = dateSoumission;
         this.statutCandidature = statutCandidature;
         this.lettreMotivation = lettreMotivation;
+        this.candidatId = candidatId;
+        this.annonceId = annonceId;
     }
 
     public int getId() {
@@ -37,6 +42,14 @@ public class Candidature {
         return lettreMotivation;
     }
 
+    public int getCandidatId() {
+        return candidatId;
+    }
+
+    public int getAnnonceId() {
+        return annonceId;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -51,5 +64,13 @@ public class Candidature {
 
     public void setStatutCandidature(String statutCandidature) {
         this.statutCandidature = statutCandidature;
+    }
+
+    public void setCandidatId(int candidatId) {
+        this.candidatId = candidatId;
+    }
+
+    public void setAnnonceId(int annonceId) {
+        this.annonceId = annonceId;
     }
 }
