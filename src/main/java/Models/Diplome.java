@@ -1,6 +1,6 @@
 package Models;
 
-public class diplome {
+public class Diplome {
 
     private int id;
     private String libelle;
@@ -8,11 +8,11 @@ public class diplome {
     private String statutValidation;
 
 
-    public diplome(){
+    public Diplome(){
 
     }
 
-    public diplome(int id, String libelle, String documentJustificatif, String statutValidation) {
+    public Diplome(int id, String libelle, String documentJustificatif, String statutValidation) {
         this.id = id;
         this.libelle = libelle;
         this.documentJustificatif = documentJustificatif;

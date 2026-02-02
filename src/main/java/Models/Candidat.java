@@ -2,14 +2,14 @@ package Models;
 
 import java.util.Date;
 
-public class candidat extends utilisateur{
+public class Candidat extends utilisateur{
 
     private String titreProfil;
     private String disponibilite;
 
-    public candidat(){}
+    public Candidat(){}
 
-    public candidat(int idUtilisateur, String email, String nom, String prenom,String password, Date date, String statutCompte, String titreProfil , String disponibilite,String role) {
+    public Candidat(int idUtilisateur, String email, String nom, String prenom, String password, Date date, String statutCompte, String titreProfil , String disponibilite, String role) {
         super(idUtilisateur,email, nom, prenom, password, date, statutCompte, role);
         this.titreProfil = titreProfil;
         this.disponibilite = disponibilite;

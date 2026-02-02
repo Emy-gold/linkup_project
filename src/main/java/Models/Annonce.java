@@ -2,7 +2,7 @@ package Models;
 
 import java.util.Date;
 
-public class annonce {
+public class Annonce {
 
     private int id;
     private String titre;
@@ -11,12 +11,12 @@ public class annonce {
     private String statutAnnonce;
     private Date datePublication;
 
-    public annonce(){
+    public Annonce(){
 
     }
 
 
-    public annonce(int id, String titre, String descriptionPoste, String typeContrat, String statutAnnonce, Date datePublication) {
+    public Annonce(int id, String titre, String descriptionPoste, String typeContrat, String statutAnnonce, Date datePublication) {
         this.id = id;
         this.titre = titre;
         this.descriptionPoste = descriptionPoste;

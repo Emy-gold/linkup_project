@@ -2,7 +2,7 @@ package Models;
 
 import java.util.Date;
 
-public class cv {
+public class Cv {
 
     private int id;
     private String titre;
@@ -10,11 +10,11 @@ public class cv {
     private Date dateMiseAJour;
     private String competences;
 
-    public cv(){
+    public Cv(){
 
     }
 
-    public cv(int id, String titre, String cheminFichier, Date dateMiseAJour, String competences) {
+    public Cv(int id, String titre, String cheminFichier, Date dateMiseAJour, String competences) {
         this.id = id;
         this.titre = titre;
         this.cheminFichier = cheminFichier;

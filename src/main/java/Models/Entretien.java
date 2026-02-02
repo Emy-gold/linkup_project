@@ -1,6 +1,6 @@
 package Models;
 
-public class entretien {
+public class Entretien {
 
     private int id;
     private String dateHeure;
@@ -8,11 +8,11 @@ public class entretien {
     private String statutEntretien;
     private String notesRecruteur;
 
-    public entretien(){
+    public Entretien(){
 
     }
 
-    public entretien(int id, String dateHeure, String lieu, String statutEntretien, String notesRecruteur) {
+    public Entretien(int id, String dateHeure, String lieu, String statutEntretien, String notesRecruteur) {
         this.id = id;
         this.dateHeure = dateHeure;
         this.lieu = lieu;
