@@ -30,7 +30,7 @@
         };
     </script>
 </head>
-<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 font-sans min-h-screen flex flex-col transition-colors duration-300">
+<body class="bg-background-light  text-slate-800 font-sans min-h-screen flex flex-col transition-colors duration-300">
     <nav class="sticky top-0 z-50 backdrop-blur-md bg-surface-light/80 border-b border-slate-200">
         <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
