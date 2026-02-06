@@ -1,4 +1,4 @@
-package Controllers;
+package Controllers.recruteur;
 
 import Models.Candidat;
 import Models.Annonce;
@@ -14,7 +14,18 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/recruteur/dashboard")
-public class RecruteurDashboardServlet extends HttpServlet {
+public class DashboardServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Logique pour afficher les annonces
 
-   //To be Continue
+
+
+
+
+
+        request.getRequestDispatcher("/Views/recruteur/dashboard.jsp").forward(request, response);
+    }
+
 }

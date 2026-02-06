@@ -37,6 +37,12 @@ public class utilisateur {
         this.statutCompte = statutCompte;
     }
 
+    public String getInitiales() {
+        String p = (prenom != null && !prenom.isEmpty()) ? prenom.substring(0, 1) : "";
+        String n = (nom != null && !nom.isEmpty()) ? nom.substring(0, 1) : "";
+        return (p + n).toUpperCase();
+    }
+
     public String getRole() {
         return role;
     }
