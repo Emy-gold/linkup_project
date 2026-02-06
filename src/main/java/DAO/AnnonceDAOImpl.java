@@ -4,6 +4,7 @@ import Models.Annonce;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class AnnonceDAOImpl implements AnnonceDAO {
 
@@ -152,6 +153,16 @@ public class AnnonceDAOImpl implements AnnonceDAO {
             e.printStackTrace();
         }
         return list;
+    }
+
+    @Override
+    public int countPending() throws Exception {
+        return 0;
+    }
+
+    @Override
+    public List<Map<String, Object>> findAllWithCompany() throws Exception {
+        return List.of();
     }
 
     private Annonce extractFromResultSet(ResultSet rs) throws SQLException {
