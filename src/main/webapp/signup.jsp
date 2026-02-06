@@ -27,7 +27,7 @@
         };
     </script>
 </head>
-<body class="bg-background-light  text-slate-800 font-sans min-h-screen flex flex-col transition-colors duration-300">
+<body class="bg-gradient-to-br from-green-50 via-lime-50 to-emerald-50 min-h-screen font-sans">
 <div class="flex justify-center items-center min-h-screen py-12 px-4">
     <div class="w-full max-w-md">
         <!-- Header -->
