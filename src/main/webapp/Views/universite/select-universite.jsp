@@ -1,6 +1,5 @@
 <%@ page import="java.util.List" %>
 <%@ page import="Models.Universite" %>
-<%@ page import="DAO.UniversiteDAO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -38,6 +37,7 @@
             padding: 20px;
             transition: transform 0.2s, box-shadow 0.2s;
             cursor: pointer;
+            background: white;
         }
         .universite-card:hover {
             transform: translateY(-5px);
@@ -57,6 +57,9 @@
             cursor: pointer;
             width: 100%;
             margin-top: 15px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
         }
         .select-btn:hover {
             background: #0056b3;
@@ -65,6 +68,12 @@
             color: #666;
             font-size: 0.9em;
             margin: 5px 0;
+        }
+        .logout {
+            display: inline-block;
+            margin-top: 30px;
+            color: #666;
+            text-decoration: none;
         }
     </style>
 </head>
@@ -75,9 +84,7 @@
     <h2>Sélectionnez une université à gérer</h2>
 
     <%
-        // Récupérer la liste des universités
-        UniversiteDAO universiteDAO = new UniversiteDAO();
-        List<Universite> universites = universiteDAO.getAllUniversites(); // À implémenter
+        List<Universite> universites = (List<Universite>) request.getAttribute("universites");
     %>
 
     <div class="universite-list">
@@ -86,24 +93,27 @@
         <div class="universite-card">
             <h3><%= universite.getNomUniversite() %></h3>
             <div class="info">
-                <strong>Email:</strong> <%= universite.getEmailContact() %><br>
+                <strong>Agent:</strong> <%= universite.getPrenom() %> <%= universite.getNom() %><br>
+                <strong>Email contact:</strong> <%= universite.getEmailContact() %><br>
                 <strong>Téléphone:</strong> <%= universite.getTelephone() %><br>
-                <strong>Adresse:</strong> <%= universite.getAdresse() %>
+                <strong>Adresse:</strong> <%= universite.getAdresse() != null ? universite.getAdresse() : "Non spécifiée" %>
             </div>
 
-            <form action="<%= request.getContextPath() %>/universite/dashboard" method="get">
-                <input type="hidden" name="id_universite" value="<%= universite.getId_universite() %>">
-                <button type="submit" class="select-btn">Gérer les diplômes</button>
-            </form>
+            <a href="<%= request.getContextPath() %>/universite-dashboard?id_universite=<%= universite.getId_universite() %>"
+               class="select-btn">
+                Gérer les diplômes
+            </a>
         </div>
         <% }
         } else { %>
-        <p>Aucune université disponible.</p>
+        <p style="color: #666; text-align: center; grid-column: 1 / -1;">
+            Aucune université disponible dans le système.
+        </p>
         <% } %>
     </div>
 
-    <div style="margin-top: 30px; text-align: center;">
-        <a href="<%= request.getContextPath() %>/logout" style="color: #666;">Déconnexion</a>
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="<%= request.getContextPath() %>/logout" class="logout">Déconnexion</a>
     </div>
 </div>
 

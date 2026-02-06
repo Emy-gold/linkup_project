@@ -72,6 +72,26 @@
         </dependency>
     </dependencies>
 
+
+    <!-- Ajouter ces mappings -->
+    <servlet>
+        <servlet-name>UniversiteSelectServlet</servlet-name>
+        <servlet-class>Controllers.UniversiteSelectServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UniversiteSelectServlet</servlet-name>
+        <url-pattern>/universite-select</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UniversiteDashboardServlet</servlet-name>
+        <servlet-class>Controllers.UniversiteDashboardServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UniversiteDashboardServlet</servlet-name>
+        <url-pattern>/universite-dashboard</url-pattern>
+    </servlet-mapping>
+
     <build>
         <plugins>
             <plugin>

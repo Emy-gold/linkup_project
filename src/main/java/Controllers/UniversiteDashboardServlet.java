@@ -5,17 +5,18 @@ import DAO.UniversiteDAO;
 import Models.Diplome;
 import Models.Universite;
 import Models.utilisateur;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import java.io.IOException;
+import jakarta.servlet.RequestDispatcher;
 import java.util.List;
 
-@WebServlet("/universite/*")
+
+@WebServlet("/universite-dashboard")
 public class UniversiteDashboardServlet extends HttpServlet {
     private DiplomeDAO diplomeDAO;
     private UniversiteDAO universiteDAO;
@@ -43,52 +44,58 @@ public class UniversiteDashboardServlet extends HttpServlet {
             return;
         }
 
-        String pathInfo = request.getPathInfo();
+        String idUniversiteStr = request.getParameter("id_universite");
 
-        // Route 1: Page de sélection des universités
-        if (pathInfo == null || "/select".equals(pathInfo)) {
-            List<Universite> universites = universiteDAO.getAllUniversites();
-            request.setAttribute("universites", universites);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/Views/universite/select-universite.jsp");
-            dispatcher.forward(request, response);
+        // DEBUG: Afficher le paramètre reçu
+        System.out.println("DEBUG: id_universite param = " + idUniversiteStr);
+
+        if (idUniversiteStr == null || idUniversiteStr.isEmpty()) {
+            // Rediriger vers la sélection si pas d'université spécifiée
+            response.sendRedirect(request.getContextPath() + "/universite-select");
+            return;
         }
-        // Route 2: Dashboard d'une université spécifique
-        else if (pathInfo.startsWith("/dashboard")) {
-            String idUniversiteStr = request.getParameter("id_universite");
 
-            if (idUniversiteStr == null || idUniversiteStr.isEmpty()) {
-                response.sendRedirect(request.getContextPath() + "/universite/select");
+        try {
+            int idUniversite = Integer.parseInt(idUniversiteStr);
+
+            // DEBUG
+            System.out.println("DEBUG: id_universite parsed = " + idUniversite);
+
+            // Récupérer les informations de l'université
+            Universite universite = universiteDAO.getUniversiteById(idUniversite);
+
+            // DEBUG
+            System.out.println("DEBUG: universite from DAO = " + universite);
+            if (universite != null) {
+                System.out.println("DEBUG: nomUniversite = " + universite.getNomUniversite());
+            }
+
+            if (universite == null) {
+                request.setAttribute("error", "Université non trouvée");
+                response.sendRedirect(request.getContextPath() + "/universite-select");
                 return;
             }
 
-            try {
-                int idUniversite = Integer.parseInt(idUniversiteStr);
+            // Récupérer les diplômes
+            List<Diplome> diplomesEnAttente = diplomeDAO.getDiplomesEnAttente(idUniversite);
+            List<Diplome> diplomesHistorique = diplomeDAO.getDiplomesHistorique(idUniversite);
 
-                // Récupérer les informations de l'université
-                Universite universite = universiteDAO.getUniversiteById(idUniversite);
-                if (universite == null) {
-                    response.sendRedirect(request.getContextPath() + "/universite/select");
-                    return;
-                }
+            // DEBUG
+            System.out.println("DEBUG: diplomesEnAttente size = " + (diplomesEnAttente != null ? diplomesEnAttente.size() : 0));
+            System.out.println("DEBUG: diplomesHistorique size = " + (diplomesHistorique != null ? diplomesHistorique.size() : 0));
 
-                // Récupérer les diplômes
-                List<Diplome> diplomesEnAttente = diplomeDAO.getDiplomesEnAttente(idUniversite);
-                List<Diplome> diplomesHistorique = diplomeDAO.getDiplomesHistorique(idUniversite);
+            // Passer les données à la JSP
+            request.setAttribute("universite", universite);
+            request.setAttribute("diplomesEnAttente", diplomesEnAttente);
+            request.setAttribute("diplomesHistorique", diplomesHistorique);
 
-                // Stocker dans la session pour garder l'université sélectionnée
-                session.setAttribute("selectedUniversite", universite);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/Views/universite/dashboard.jsp");
+            dispatcher.forward(request, response);
 
-                // Passer les données à la JSP
-                request.setAttribute("universite", universite);
-                request.setAttribute("diplomesEnAttente", diplomesEnAttente);
-                request.setAttribute("diplomesHistorique", diplomesHistorique);
-
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/Views/universite/dashboard.jsp");
-                dispatcher.forward(request, response);
-
-            } catch (NumberFormatException e) {
-                response.sendRedirect(request.getContextPath() + "/universite/select");
-            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            request.setAttribute("error", "ID université invalide");
+            response.sendRedirect(request.getContextPath() + "/universite-select");
         }
     }
 
@@ -105,6 +112,8 @@ public class UniversiteDashboardServlet extends HttpServlet {
         String idDiplomeStr = request.getParameter("id_diplome");
         String idUniversiteStr = request.getParameter("id_universite");
 
+        System.out.println("DEBUG POST: action=" + action + ", idDiplome=" + idDiplomeStr + ", idUniversite=" + idUniversiteStr);
+
         if (action != null && idDiplomeStr != null && idUniversiteStr != null) {
             int idDiplome = Integer.parseInt(idDiplomeStr);
             int idUniversite = Integer.parseInt(idUniversiteStr);
@@ -116,7 +125,7 @@ public class UniversiteDashboardServlet extends HttpServlet {
             }
 
             // Rediriger vers le dashboard de la même université
-            response.sendRedirect(request.getContextPath() + "/universite/dashboard?id_universite=" + idUniversite);
+            response.sendRedirect(request.getContextPath() + "/universite-dashboard?id_universite=" + idUniversite);
         }
     }
 }

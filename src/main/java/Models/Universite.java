@@ -2,22 +2,26 @@ package Models;
 
 import java.util.Date;
 
-public class Universite extends utilisateur{
-
+public class Universite extends utilisateur {
     private String nomUniversite;
-    private  String adresse;
-    private  String telephone;
+    private String adresse;
+    private String telephone;
     private String emailContact;
 
     public Universite() {
     }
 
     public Universite(int idUtilisateur, String email, String nom, String prenom, String password, Date date, String statutCompte, String nomUniversite, String adresse, String telephone, String emailContact, String role) {
-        super(idUtilisateur, email, nom, prenom,password, date, statutCompte,role);
+        super(idUtilisateur, email, nom, prenom, password, date, statutCompte, role);
         this.nomUniversite = nomUniversite;
         this.adresse = adresse;
         this.telephone = telephone;
         this.emailContact = emailContact;
+    }
+
+    // AJOUTER CE GETTER
+    public int getId_universite() {
+        return super.getIdUtilisateur();
     }
 
     public String getNomUniversite() {
