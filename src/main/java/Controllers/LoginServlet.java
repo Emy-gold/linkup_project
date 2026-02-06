@@ -34,7 +34,7 @@ public class LoginServlet extends HttpServlet {
                        resp.sendRedirect("Views/candidat/dashboard.jsp");
                        break;
                    case "RECRUTEUR":
-                       resp.sendRedirect("Views/recruteur/RecruteurDashboard.jsp");
+                       resp.sendRedirect("Views/recruteur/dashboard.jsp");
                        break;
                    case "ADMIN":
                        resp.sendRedirect("Views/admin/dashboard.jsp");

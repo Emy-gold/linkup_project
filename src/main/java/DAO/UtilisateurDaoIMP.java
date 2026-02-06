@@ -46,6 +46,7 @@ public class UtilisateurDaoIMP implements UtilisateurDAO {
             u.setPrenom(rs.getString("prenom"));
             u.setRole(rs.getString("role"));
             u.setStatutCompte(rs.getString("statut_compte"));
+            u.setDate(rs.getDate("date_inscription"));
             return u;
         }
         return null;

@@ -1,9 +1,11 @@
 package Models;
 
+import java.util.Date;
+
 public class Entretien {
 
     private int id;
-    private String dateHeure;
+    private Date dateHeure;
     private String lieu;
     private String statutEntretien;
     private String notesRecruteur;
@@ -16,7 +18,7 @@ public class Entretien {
 
     }
 
-    public Entretien(int id, String dateHeure, String lieu, String statutEntretien, String notesRecruteur,int candidatureId) {
+    public Entretien(int id, Date dateHeure, String lieu, String statutEntretien, String notesRecruteur, int candidatureId) {
         this.id = id;
         this.dateHeure = dateHeure;
         this.lieu = lieu;
@@ -29,7 +31,7 @@ public class Entretien {
         return id;
     }
 
-    public String getDateHeure() {
+    public Date getDateHeure() {
         return dateHeure;
     }
 
@@ -53,7 +55,7 @@ public class Entretien {
         this.id = id;
     }
 
-    public void setDateHeure(String dateHeure) {
+    public void setDateHeure(Date dateHeure) {
         this.dateHeure = dateHeure;
     }
 
