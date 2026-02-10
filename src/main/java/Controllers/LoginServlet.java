@@ -26,8 +26,9 @@ public class LoginServlet extends HttpServlet {
             utilisateur u = userDAO.login(req.getParameter("email"), req.getParameter("password"));
 
             if (u != null) {
-                // Security Check: Block suspended users (except Admins)
-                if (!"ACTIF".equals(u.getStatutCompte()) && !"ADMIN".equals(u.getRole())) {
+                // Security Check: Block ONLY suspended users (except Admins) for Dev phase
+                // TODO: Réactiver la restriction EN_ATTENTE pour la production
+                if ("SUSPENDU".equals(u.getStatutCompte()) && !"ADMIN".equals(u.getRole())) {
                     req.setAttribute("error", "Votre compte est suspendu. Contactez l'administrateur.");
                     req.getRequestDispatcher("login.jsp").forward(req, resp);
                     return;
