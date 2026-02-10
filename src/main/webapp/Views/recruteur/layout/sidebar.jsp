@@ -32,7 +32,7 @@
 </head>
 
 <!-- Sidebar -->
-<aside class="w-56 bg-surface-light border-r border-slate-200 min-h-screen sticky top-0 flex flex-col">
+<aside class="w-56 bg-surface-light border-r border-slate-200 min-h-screen sticky top-0 flex flex-col shadow-lg">
     <!-- Logo -->
     <div class="p-6 border-b border-slate-200">
         <div class="flex items-center space-x-2">

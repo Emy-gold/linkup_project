@@ -5,6 +5,7 @@
       <map>
         <entry key="file://$PROJECT_DIR$/src/main/webapp/Views/candidat/profile.jsp" value="file://$PROJECT_DIR$/src/main/webapp/Views/candidat" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/Views/recruteur/RecruteurDashboard.jsp" value="file://$PROJECT_DIR$/src/main/webapp/Views/recruteur" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/Views/recruteur/complete-profile.jsp" value="file://$PROJECT_DIR$/src/main/webapp/Views/recruteur" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/Views/recruteur/dashboard.jsp" value="file://$PROJECT_DIR$/src/main/webapp/Views/recruteur" />
       </map>
     </option>

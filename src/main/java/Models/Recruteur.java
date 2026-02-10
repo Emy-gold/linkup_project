@@ -9,18 +9,38 @@ public class Recruteur extends utilisateur{
     private String descriptionEntreprise;
     private String logo;
     private String posteOccupe;
+    private int userId;
+    private int recruteurId;
+
 
     public Recruteur() {
     }
 
-    public Recruteur(int idUtilisateur, String email, String nom, String prenom, String password, Date date, String statutCompte, String nomEntreprise, String secteurActivite, String descriptionEntreprise, String logo, String posteOccupe, String role) {
+    public Recruteur(int idUtilisateur, String email, String nom, String prenom, String password, Date date, String statutCompte, String nomEntreprise, String secteurActivite, String descriptionEntreprise, String logo, String posteOccupe, String role,int userId, int recruteurId) {
         super(idUtilisateur, email, nom, prenom,password, date, statutCompte,role);
         this.nomEntreprise = nomEntreprise;
         this.secteurActivite = secteurActivite;
         this.descriptionEntreprise = descriptionEntreprise;
         this.logo = logo;
         this.posteOccupe = posteOccupe;
+        this.userId = userId;
     }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public int getRecruteurId() {return recruteurId;}
+
+    public void setRecruteurId(int recruteurId) {
+        this.recruteurId = recruteurId;
+    }
+
+
 
     public String getNomEntreprise() {
         return nomEntreprise;

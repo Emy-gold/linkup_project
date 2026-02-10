@@ -1,7 +1,10 @@
 package Controllers;
 
+import DAO.RecruteurDAO;
+import DAO.RecruteurDAOImpl;
 import DAO.UtilisateurDAO;
 import DAO.UtilisateurDaoIMP;
+import Models.Recruteur;
 import Models.utilisateur;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -34,8 +37,18 @@ public class LoginServlet extends HttpServlet {
                        resp.sendRedirect(req.getContextPath() + "/candidat/dashboard");
                        break;
                    case "RECRUTEUR":
-                       resp.sendRedirect("Views/recruteur/dashboard.jsp");
+                       RecruteurDAO recruteurDAO = new RecruteurDAOImpl();
+
+                       int userId = u.getIdUtilisateur();
+                       if (recruteurDAO.existsByUserId(userId)) {
+                           resp.sendRedirect(req.getContextPath() + "/recruteur/dashboard");
+                       } else {
+                           resp.sendRedirect(req.getContextPath() + "/Views/recruteur/complete-profile.jsp");
+                       }
+
                        break;
+
+
                    case "ADMIN":
                        resp.sendRedirect("Views/admin/dashboard.jsp");
                        break;
