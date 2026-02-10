@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CVDAOImpl implements CVDAO {
-
     @Override
     public void create(Cv c) {
         String sql = "INSERT INTO cv (id_candidat, titre_cv, chemin_fichier, date_mise_a_jour, competences) VALUES (?, ?, ?, ?, ?)";
@@ -17,7 +16,11 @@ public class CVDAOImpl implements CVDAO {
             stmt.setString(3, c.getCheminFichier());
             stmt.setDate(4, new java.sql.Date(c.getDateMiseAJour().getTime()));
             stmt.setString(5, c.getCompetences());
-            stmt.executeUpdate();
+
+            int rows = stmt.executeUpdate();
+            if(rows == 0) {
+                System.out.println("CV not saved - 0 rows affected");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -30,9 +33,7 @@ public class CVDAOImpl implements CVDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return extractFromResultSet(rs);
-            }
+            if (rs.next()) return extractFromResultSet(rs);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -46,9 +47,7 @@ public class CVDAOImpl implements CVDAO {
         try (Connection conn = ConnexionDB.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                list.add(extractFromResultSet(rs));
-            }
+            while (rs.next()) list.add(extractFromResultSet(rs));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -91,9 +90,7 @@ public class CVDAOImpl implements CVDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, candidatId);
             ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                list.add(extractFromResultSet(rs));
-            }
+            while (rs.next()) list.add(extractFromResultSet(rs));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -107,9 +104,7 @@ public class CVDAOImpl implements CVDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, candidatId);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
+            if (rs.next()) return rs.getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
         }

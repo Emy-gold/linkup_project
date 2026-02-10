@@ -15,8 +15,6 @@ public class Candidature {
 
     public Candidature(){
     }
-
-
     public Candidature(int id, Date dateSoumission, String statutCandidature, String lettreMotivation, int candidatId, int annonceId) {
         this.id = id;
         this.dateSoumission = dateSoumission;
