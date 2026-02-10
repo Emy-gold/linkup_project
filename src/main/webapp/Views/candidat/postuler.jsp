@@ -54,7 +54,7 @@
                 <div class="flex flex-wrap gap-2 mb-3">
                     <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium"><%= currentAnnonce.getTypeContrat() %></span>
                 </div>
-                <p class="text-gray-600 text-sm"><%= currentAnnonce.getDescriptionPoste() %></p>
+                <p class="text-gray-600 text-sm"><%= currentAnnonce.getDescription() %></p>
             </div>
         </div>
     </div>

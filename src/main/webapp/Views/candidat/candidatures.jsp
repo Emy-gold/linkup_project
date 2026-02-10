@@ -41,7 +41,7 @@
     <!-- Sidebar -->
     <aside class="w-64 bg-white shadow-lg">
         <div class="p-6">
-            <img src="../../assets/logo.png" class="h-12 w-auto mb-8" alt="LinkUp">
+            <img src="${pageContext.request.contextPath}/assets/logo.png" class="h-12 w-auto mb-8" alt="LinkUp">
             <nav class="space-y-2">
                 <a href="dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
                     <span class="material-icons">dashboard</span>
@@ -70,7 +70,7 @@
             </nav>
         </div>
         <div class="absolute bottom-0 w-64 p-6 border-t">
-            <a href="../../logout" class="flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors">
+            <a href="${pageContext.request.contextPath}/logout" class="flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors">
                 <span class="material-icons">logout</span>
                 <span class="font-medium">Déconnexion</span>
             </a>

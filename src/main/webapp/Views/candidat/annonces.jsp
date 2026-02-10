@@ -46,7 +46,7 @@
     <!-- Sidebar -->
     <aside class="w-64 bg-white shadow-lg">
         <div class="p-6">
-            <img src="../../assets/logo.png" class="h-12 w-auto mb-8" alt="LinkUp">
+            <img src="${pageContext.request.contextPath}/assets/logo.png" class="h-12 w-auto mb-8" alt="LinkUp">
             <nav class="space-y-2">
                 <a href="dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
                     <span class="material-icons">dashboard</span>
@@ -158,12 +158,12 @@
                             </div>
                             <div class="flex-1">
                                 <h3 class="text-xl font-bold text-gray-800 mb-2"><%= a.getTitre() %></h3>
-                                <p class="text-gray-600 mb-3">Recruteur ID: <%= a.getRecruteurId() %></p>
+                                <p class="text-gray-600 mb-3">Recruteur ID: <%= a.getId_recruteur() %></p>
                                 <div class="flex flex-wrap gap-2 mb-4">
                                     <span class="px-3 py-1 <%= typeContratClass %> rounded-full text-sm font-medium"><%= a.getTypeContrat() %></span>
                                     <span class="px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-sm">ID: <%= a.getId() %></span>
                                 </div>
-                                <p class="text-gray-600 text-sm mb-4"><%= a.getDescriptionPoste() %></p>
+                                <p class="text-gray-600 text-sm mb-4"><%= a.getDescription() %></p>
                                 <div class="flex items-center gap-4 text-sm text-gray-500">
                                         <span class="flex items-center gap-1">
                                             <span class="material-icons text-sm">schedule</span>
