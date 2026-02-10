@@ -6,28 +6,27 @@ public class Annonce {
 
     private int id;
     private String titre;
-    private String descriptionPoste;
+    private String description;
     private String typeContrat;
     private String statutAnnonce;
     private Date datePublication;
 
-    //the foreign keys
-    private int recruteurId;
+    // the foreign keys
+    private int id_recruteur;
 
-
-    public Annonce(){
+    public Annonce() {
 
     }
 
-
-    public Annonce(int id, String titre, String descriptionPoste, String typeContrat, String statutAnnonce, Date datePublication, int recruteurId) {
+    public Annonce(int id, String titre, String description, String typeContrat, String statutAnnonce,
+            Date datePublication, int id_recruteur) {
         this.id = id;
         this.titre = titre;
-        this.descriptionPoste = descriptionPoste;
+        this.description = description;
         this.typeContrat = typeContrat;
         this.statutAnnonce = statutAnnonce;
         this.datePublication = datePublication;
-        this.recruteurId = recruteurId;
+        this.id_recruteur = id_recruteur;
     }
 
     public int getId() {
@@ -38,8 +37,8 @@ public class Annonce {
         return titre;
     }
 
-    public String getDescriptionPoste() {
-        return descriptionPoste;
+    public String getDescription() {
+        return description;
     }
 
     public String getTypeContrat() {
@@ -54,7 +53,9 @@ public class Annonce {
         return statutAnnonce;
     }
 
-    public int getRecruteurId() {return recruteurId;}
+    public int getId_recruteur() {
+        return id_recruteur;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -68,8 +69,8 @@ public class Annonce {
         this.datePublication = datePublication;
     }
 
-    public void setDescriptionPoste(String descriptionPoste) {
-        this.descriptionPoste = descriptionPoste;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setStatutAnnonce(String statutAnnonce) {
@@ -80,7 +81,7 @@ public class Annonce {
         this.typeContrat = typeContrat;
     }
 
-    public void setRecruteurId(int recruteurId) {
-        this.recruteurId = recruteurId;
+    public void setId_recruteur(int id_recruteur) {
+        this.id_recruteur = id_recruteur;
     }
 }

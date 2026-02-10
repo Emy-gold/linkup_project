@@ -43,7 +43,7 @@ public class AnnonceServlet extends HttpServlet {
         Annonce annonce = new Annonce();
         //annonce.setRecruteurId(recruteurId);
         annonce.setTitre(titre);
-        annonce.setDescriptionPoste(description);
+
         annonce.setTypeContrat(typeContrat);
         annonce.setStatutAnnonce(statut);
         annonce.setDatePublication(new Date());

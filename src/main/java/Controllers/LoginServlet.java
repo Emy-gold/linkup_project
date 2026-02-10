@@ -20,51 +20,57 @@ public class LoginServlet extends HttpServlet {
 
     private UtilisateurDAO userDAO = new UtilisateurDaoIMP();
 
-   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-       try {
-           utilisateur u = userDAO.login(req.getParameter("email"),req.getParameter("password"));
+        try {
+            utilisateur u = userDAO.login(req.getParameter("email"), req.getParameter("password"));
 
-           if( u != null){
-               HttpSession session = req.getSession();
-               session.setAttribute("user", u);
-               session.setAttribute("userId", u.getIdUtilisateur());
-               session.setAttribute("role", u.getRole());
+            if (u != null) {
+                // Security Check: Block suspended users (except Admins)
+                if (!"ACTIF".equals(u.getStatutCompte()) && !"ADMIN".equals(u.getRole())) {
+                    req.setAttribute("error", "Votre compte est suspendu. Contactez l'administrateur.");
+                    req.getRequestDispatcher("login.jsp").forward(req, resp);
+                    return;
+                }
 
-               switch (u.getRole()) {
+                HttpSession session = req.getSession();
+                session.setAttribute("user", u);
+                session.setAttribute("userId", u.getIdUtilisateur());
+                session.setAttribute("role", u.getRole());
 
-                   case "CANDIDAT":
-                       resp.sendRedirect(req.getContextPath() + "/candidat/dashboard");
-                       break;
-                   case "RECRUTEUR":
-                       RecruteurDAO recruteurDAO = new RecruteurDAOImpl();
+                switch (u.getRole()) {
 
-                       int userId = u.getIdUtilisateur();
-                       if (recruteurDAO.existsByUserId(userId)) {
-                           resp.sendRedirect(req.getContextPath() + "/recruteur/dashboard");
-                       } else {
-                           resp.sendRedirect(req.getContextPath() + "/Views/recruteur/complete-profile.jsp");
-                       }
+                    case "CANDIDAT":
+                        resp.sendRedirect(req.getContextPath() + "/candidat/dashboard");
+                        break;
+                    case "RECRUTEUR":
+                        RecruteurDAO recruteurDAO = new RecruteurDAOImpl();
 
-                       break;
+                        int userId = u.getIdUtilisateur();
+                        if (recruteurDAO.existsByUserId(userId)) {
+                            resp.sendRedirect(req.getContextPath() + "/recruteur/dashboard");
+                        } else {
+                            resp.sendRedirect(req.getContextPath() + "/Views/recruteur/complete-profile.jsp");
+                        }
 
+                        break;
 
-                   case "ADMIN":
-                       resp.sendRedirect("Views/admin/dashboard.jsp");
-                       break;
-                   case "AGENT_UNIV":
-                       resp.sendRedirect("Views/universite/dashboard.jsp");
-                       break;
-                   default:
-                       resp.sendRedirect("/login.jsp?error=invalid_role");
-                       break;
-               }
-           }else {
-               resp.sendRedirect("login.jsp?error=true");
-           }
-       } catch (Exception e) {
-           e.printStackTrace();
-           resp.sendRedirect("login.jsp?error=server");
-       }
-   }
+                    case "ADMIN":
+                        resp.sendRedirect(req.getContextPath() + "/admin/dashboard?tab=dashboard");
+                        break;
+                    case "AGENT_UNIV":
+                        resp.sendRedirect("Views/universite/dashboard.jsp");
+                        break;
+                    default:
+                        resp.sendRedirect("/login.jsp?error=invalid_role");
+                        break;
+                }
+            } else {
+                resp.sendRedirect("login.jsp?error=true");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.sendRedirect("login.jsp?error=server");
+        }
+    }
 }

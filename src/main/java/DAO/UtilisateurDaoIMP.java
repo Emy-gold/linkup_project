@@ -90,7 +90,17 @@ public class UtilisateurDaoIMP implements UtilisateurDAO {
     @Override
     public java.util.List<utilisateur> findPendingEntities() throws Exception {
         java.util.List<utilisateur> users = new java.util.ArrayList<>();
-        String sql = "SELECT * FROM utilisateur WHERE (role = 'RECRUTEUR' OR role = 'AGENT_UNIV') AND statut_compte = 'EN_ATTENTE'";
+        String sql = "SELECT u.id_utilisateur, u.nom, u.prenom, u.email, u.role, u.statut_compte, u.date_inscription, "
+                +
+                "r.nom_entreprise AS nom_entite, r.secteur_activite, NULL AS adresse, NULL AS telephone " +
+                "FROM utilisateur u JOIN recruteur r ON u.id_utilisateur = r.id_recruteur " +
+                "WHERE u.statut_compte = 'EN_ATTENTE' " +
+                "UNION " +
+                "SELECT u.id_utilisateur, u.nom, u.prenom, u.email, u.role, u.statut_compte, u.date_inscription, " +
+                "univ.nom_universite AS nom_entite, NULL AS secteur_activite, univ.adresse, univ.telephone " +
+                "FROM utilisateur u JOIN universite univ ON u.id_utilisateur = univ.id_universite " +
+                "WHERE u.statut_compte = 'EN_ATTENTE'";
+
         Connection cn = ConnexionDB.getConnection();
         PreparedStatement ps = cn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -104,6 +114,12 @@ public class UtilisateurDaoIMP implements UtilisateurDAO {
             u.setRole(rs.getString("role"));
             u.setStatutCompte(rs.getString("statut_compte"));
             u.setDate(rs.getDate("date_inscription"));
+
+            u.setNomEntite(rs.getString("nom_entite"));
+            u.setSecteurActivite(rs.getString("secteur_activite"));
+            u.setAdresse(rs.getString("adresse"));
+            u.setTelephone(rs.getString("telephone"));
+
             users.add(u);
         }
         return users;

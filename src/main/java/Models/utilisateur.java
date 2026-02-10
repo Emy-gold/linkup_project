@@ -14,9 +14,17 @@ public class utilisateur {
     protected Date date;
     protected String statutCompte;
 
-    public utilisateur(){}
+    // Champs additionnels pour la validation des entités (Recruteur/Université)
+    protected String nomEntite;
+    protected String secteurActivite;
+    protected String adresse;
+    protected String telephone;
 
-    public utilisateur(int idUtilisateur, String email, String nom, String prenom,String password,  Date date, String statutCompte, String role) {
+    public utilisateur() {
+    }
+
+    public utilisateur(int idUtilisateur, String email, String nom, String prenom, String password, Date date,
+            String statutCompte, String role) {
         this.idUtilisateur = idUtilisateur;
         this.email = email;
         this.nom = nom;
@@ -27,7 +35,8 @@ public class utilisateur {
         this.statutCompte = statutCompte;
     }
 
-    public utilisateur(String email,String password, String nom, String prenom, String role, Date date, String statutCompte) {
+    public utilisateur(String email, String password, String nom, String prenom, String role, Date date,
+            String statutCompte) {
         this.email = email;
         this.nom = nom;
         this.prenom = prenom;
@@ -67,9 +76,13 @@ public class utilisateur {
         this.email = email;
     }
 
-    public String getPassword() {return password;}
+    public String getPassword() {
+        return password;
+    }
 
-    public void setPassword(String password) {this.password = password;}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getNom() {
         return nom;
@@ -101,5 +114,38 @@ public class utilisateur {
 
     public void setStatutCompte(String statutCompte) {
         this.statutCompte = statutCompte;
+    }
+
+    // Getters et Setters pour les champs additionnels
+    public String getNomEntite() {
+        return nomEntite;
+    }
+
+    public void setNomEntite(String nomEntite) {
+        this.nomEntite = nomEntite;
+    }
+
+    public String getSecteurActivite() {
+        return secteurActivite;
+    }
+
+    public void setSecteurActivite(String secteurActivite) {
+        this.secteurActivite = secteurActivite;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 }
