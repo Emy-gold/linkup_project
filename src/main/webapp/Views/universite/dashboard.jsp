@@ -1,250 +1,741 @@
-<%@ page import="Models.Diplome" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
+<%@ page import="Models.Diplome" %>
 <%@ page import="Models.Universite" %>
-<%
-    // Récupérer les attributs
-    Universite universite = (Universite) request.getAttribute("universite");
-    List<Diplome> diplomesEnAttente = (List<Diplome>) request.getAttribute("diplomesEnAttente");
-    List<Diplome> diplomesHistorique = (List<Diplome>) request.getAttribute("diplomesHistorique");
+<%@ page import="Models.utilisateur" %>
 
-    // Si universite est null, rediriger
+<%  Universite universite=(Universite)
+    request.getAttribute("universite"); List<Diplome> diplomesEnAttente = (List<Diplome>)
+            request.getAttribute("diplomesEnAttente");
+    List<Diplome> diplomesHistorique = (List<Diplome>)
+            request.getAttribute("diplomesHistorique");
+
+    // Récupérer l'utilisateur en session
+    utilisateur user = (utilisateur) session.getAttribute("user");
+
+    // Sécurité: Redirection si les objets requis sont absents
+    if (user == null) {
+        response.sendRedirect(request.getContextPath() + "/login.jsp");
+        return;
+    }
     if (universite == null) {
         response.sendRedirect(request.getContextPath() + "/universite-select");
         return;
     }
+
+    // Statistiques pour les compteurs
+    int pendingCount = (diplomesEnAttente != null) ? diplomesEnAttente.size() : 0;
+    int historyCount = (diplomesHistorique != null) ? diplomesHistorique.size() : 0;
+    int totalCount = pendingCount + historyCount;
 %>
+
 <!DOCTYPE html>
-<html>
+<html lang="fr">
+
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard - <%= universite.getNomUniversite() != null ? universite.getNomUniversite() : "Université" %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord - <%= universite.getNomUniversite() %>
+    </title>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
+        :root {
+            --primary-color: #1e4d3b;
+            --secondary-color: #2a6b52;
+            --accent-color: #e8f5e9;
+            --text-dark: #2c3e50;
+            --text-light: #95a5a6;
+            --white: #ffffff;
+            --background: #f4f7f6;
+            --custom-green: #348E1C;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --border-radius: 12px;
+            --danger-color: #e74c3c;
+            --danger-bg: #fde8e7;
+            --success-color: #27ae60;
+            --success-bg: #eafaf1;
         }
-        .header {
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        .header h1, .header h2 {
+
+        * {
             margin: 0;
-            color: #333;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
         }
-        .header-info {
-            color: #666;
-            margin-top: 10px;
-        }
-        .back-btn {
-            background: #6c757d;
-            color: white;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            display: inline-block;
-            margin-bottom: 15px;
-        }
-        .back-btn:hover {
-            background: #5a6268;
-        }
-        .container {
+
+        body {
+            background-color: var(--background);
             display: flex;
-            gap: 20px;
+            min-height: 100vh;
+            color: var(--text-dark);
         }
-        .column {
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--white);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.02);
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding: 1rem 0;
+        }
+
+        .logo img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            color: var(--text-light);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+            color: var(--text-dark);
+        }
+
+        .nav-link.active {
+            background-color: var(--accent-color);
+            color: var(--custom-green);
+        }
+
+        .nav-link svg {
+            margin-right: 12px;
+        }
+
+        .logout-btn {
+            margin-top: auto;
+            background-color: transparent;
+            color: var(--custom-green);
+            border: 1px solid var(--custom-green);
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+            gap: 10px;
+        }
+
+        .logout-btn:hover {
+            background-color: var(--accent-color);
+        }
+
+        .logout-btn svg {
+            stroke: var(--custom-green);
+        }
+
+        /* Main Content area */
+        .main-container {
             flex: 1;
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-left: 260px;
+            display: flex;
+            flex-direction: column;
         }
+
+        /* Top Bar */
+        .top-navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--white);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+
+        .navbar-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .navbar-title svg {
+            color: var(--custom-green);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            display: block;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .user-role {
+            display: block;
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1rem;
+            border: 2px solid var(--white);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Page Content */
+        .page-content {
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        /* Stats Section */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-box {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .stat-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        .stat-circle.orange {
+            background-color: #fff3e0;
+            color: #f39c12;
+        }
+
+        .stat-circle.green {
+            background-color: var(--accent-color);
+            color: var(--custom-green);
+        }
+
+        .stat-circle.blue {
+            background-color: #e3f2fd;
+            color: #3498db;
+        }
+
+        .stat-details .value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-details .label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Tables and Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+        }
+
+        .section-card {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .section-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+        }
+
+        .data-table-wrapper {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
         }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
+
         th {
-            background-color: #f2f2f2;
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            background: #fcfcfc;
+            border-bottom: 1px solid #eee;
         }
-        .actions form {
-            display: inline;
-            margin: 0 2px;
+
+        td {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 0.95rem;
+            vertical-align: middle;
         }
-        .btn {
-            padding: 5px 10px;
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background-color: #fafafa;
+        }
+
+        /* Badges & Actions */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            gap: 6px;
+        }
+
+        .badge-success {
+            background-color: var(--success-bg);
+            color: var(--success-color);
+        }
+
+        .badge-danger {
+            background-color: var(--danger-bg);
+            color: var(--danger-color);
+        }
+
+        .btn-small {
             border: none;
-            border-radius: 3px;
+            padding: 8px 14px;
+            border-radius: 8px;
             cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 0.9em;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
-        .btn-validate {
-            background: #28a745;
-            color: white;
+
+        .btn-approve {
+            background-color: var(--accent-color);
+            color: var(--custom-green);
         }
-        .btn-reject {
-            background: #dc3545;
-            color: white;
+
+        .btn-approve:hover {
+            background-color: var(--custom-green);
+            color: var(--white);
         }
-        .valide { color: green; }
-        .rejete { color: red; }
-        .stats {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 20px;
+
+        .btn-deny {
+            background-color: #fff1f0;
+            color: #cf1322;
         }
-        .empty-message {
-            color: #999;
+
+        .btn-deny:hover {
+            background-color: #cf1322;
+            color: var(--white);
+        }
+
+        .no-data {
+            padding: 3rem;
             text-align: center;
-            padding: 20px;
+            color: var(--text-light);
+            font-style: italic;
         }
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
+
+        .alert-box {
+            background-color: var(--danger-bg);
+            color: var(--danger-color);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid rgba(231, 76, 60, 0.15);
         }
     </style>
 </head>
+
 <body>
-
-<div class="header">
-    <h1>ESPACE UNIVERSITÉ</h1>
-    <h2><%= universite.getNomUniversite() != null ? universite.getNomUniversite() : "Université" %></h2>
-    <div class="header-info">
-        <p><strong>Agent responsable:</strong>
-            <%= universite.getPrenom() != null ? universite.getPrenom() : "" %>
-            <%= universite.getNom() != null ? universite.getNom() : "" %></p>
-        <p><strong>Email contact:</strong>
-            <%= universite.getEmailContact() != null ? universite.getEmailContact() : "Non spécifié" %></p>
-        <p><strong>Téléphone:</strong>
-            <%= universite.getTelephone() != null ? universite.getTelephone() : "Non spécifié" %></p>
+<!-- Sidebar Navigation -->
+<div class="sidebar">
+    <div class="logo">
+        <img src="<%= request.getContextPath() %>/assets/logo.png" alt="LinkUp">
     </div>
+    <nav>
+        <a href="<%= request.getContextPath() %>/universite-select"
+           class="nav-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            Mes Universités
+        </a>
+        <a href="#" class="nav-link active">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="3" y1="9" x2="21" y2="9"></line>
+                <line x1="9" y1="21" x2="9" y2="9"></line>
+            </svg>
+            Tableau de Bord
+        </a>
+    </nav>
+    <a href="<%= request.getContextPath() %>/Logout" class="logout-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        Déconnexion
+    </a>
 </div>
 
-<a href="<%= request.getContextPath() %>/universite-select" class="back-btn">
-    ← Changer d'université
-</a>
+<div class="main-container">
+    <!-- Top Horizontal Navbar -->
+    <header class="top-navbar">
+        <div class="navbar-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                 stroke-linejoin="round">
+                <path d="M3 21h18"></path>
+                <path d="M5 21V7l8-4 8 4v14"></path>
+                <path d="M17 21v-8.5a1.5 1.5 0 0 0-3 0V21"></path>
+                <path d="M9 21v-2"></path>
+            </svg>
+            <%= universite.getNomUniversite() %>
+        </div>
+        <div class="user-profile">
+            <div class="user-info">
+                                                        <span class="user-name">
+                                                            <%= user.getPrenom() %>
+                                                                <%= user.getNom() %>
+                                                        </span>
+                <span class="user-role">Administrateur Universitaire</span>
+            </div>
+            <div class="avatar">
+                <%= user.getInitiales() %>
+            </div>
+        </div>
+    </header>
 
-<!-- Afficher les erreurs s'il y en a -->
-<% String error = (String) request.getAttribute("error"); %>
-<% if (error != null) { %>
-<div class="error">
-    <strong>Erreur:</strong> <%= error %>
-</div>
-<% } %>
-
-<div class="container">
-    <!-- Colonne gauche : Diplômes à valider -->
-    <div class="column">
-        <h3>DEMANDES DE VALIDATION EN ATTENTE</h3>
-
-        <% if (diplomesEnAttente != null && !diplomesEnAttente.isEmpty()) { %>
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Candidat</th>
-                <th>Diplôme</th>
-                <th>Document</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <% for (Diplome diplome : diplomesEnAttente) { %>
-            <tr>
-                <td><%= diplome.getId_diplome() %></td>
-                <td><%= diplome.getId_candidat() %></td>
-                <td><strong><%= diplome.getLibelle() != null ? diplome.getLibelle() : "" %></strong></td>
-                <td><%= diplome.getDocument_justificatif() != null ? diplome.getDocument_justificatif() : "" %></td>
-                <td class="actions">
-                    <form action="<%= request.getContextPath() %>/universite-dashboard" method="post">
-                        <input type="hidden" name="action" value="valider">
-                        <input type="hidden" name="id_diplome" value="<%= diplome.getId_diplome() %>">
-                        <input type="hidden" name="id_universite" value="<%= universite.getId_universite() %>">
-                        <button type="submit" class="btn btn-validate" onclick="return confirm('Valider ce diplôme?')">Valider</button>
-                    </form>
-                    <form action="<%= request.getContextPath() %>/universite-dashboard" method="post">
-                        <input type="hidden" name="action" value="rejeter">
-                        <input type="hidden" name="id_diplome" value="<%= diplome.getId_diplome() %>">
-                        <input type="hidden" name="id_universite" value="<%= universite.getId_universite() %>">
-                        <button type="submit" class="btn btn-reject" onclick="return confirm('Rejeter cette demande?')">Rejeter</button>
-                    </form>
-                </td>
-            </tr>
-            <% } %>
-            </tbody>
-        </table>
-        <% } else { %>
-        <p class="empty-message">Aucune demande en attente</p>
+    <!-- Main Fluid Content -->
+    <main class="page-content">
+        <% String error=(String) request.getAttribute("error"); %>
+        <% if (error !=null) { %>
+        <div class="alert-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <%= error %>
+        </div>
         <% } %>
-    </div>
 
-    <!-- Colonne droite : Historique -->
-    <div class="column">
-        <h3>HISTORIQUE DES VALIDATIONS</h3>
+        <!-- Statistics Grid -->
+        <section class="stats-row">
+            <div class="stat-box">
+                <div class="stat-circle orange">
+                    <svg width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14">
+                        </polyline>
+                    </svg>
+                </div>
+                <div class="stat-details">
+                                                                        <span class="value">
+                                                                            <%= pendingCount %>
+                                                                        </span>
+                    <span class="label">En Attente</span>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-circle green">
+                    <svg width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12">
+                        </polyline>
+                    </svg>
+                </div>
+                <div class="stat-details">
+                                                                        <span class="value">
+                                                                            <%= historyCount %>
+                                                                        </span>
+                    <span class="label">Validés/Rejetés</span>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-circle blue">
+                    <svg width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <path
+                                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z">
+                        </path>
+                        <polyline points="14 2 14 8 20 8">
+                        </polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                </div>
+                <div class="stat-details">
+                                                                        <span class="value">
+                                                                            <%= totalCount %>
+                                                                        </span>
+                    <span class="label">Total Reçus</span>
+                </div>
+            </div>
+        </section>
 
-        <% if (diplomesHistorique != null && !diplomesHistorique.isEmpty()) { %>
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Candidat</th>
-                <th>Diplôme</th>
-                <th>Document</th>
-                <th>Statut</th>
-                <th>Date</th>
-            </tr>
-            </thead>
-            <tbody>
-            <% for (Diplome diplome : diplomesHistorique) {
-                String statutClass = "VALIDÉ".equals(diplome.getStatut_validation()) ? "valide" : "rejete";
-            %>
-            <tr>
-                <td><%= diplome.getId_diplome() %></td>
-                <td><%= diplome.getId_candidat() %></td>
-                <td><%= diplome.getLibelle() != null ? diplome.getLibelle() : "" %></td>
-                <td><%= diplome.getDocument_justificatif() != null ? diplome.getDocument_justificatif() : "" %></td>
-                <td class="<%= statutClass %>">
-                    <%= diplome.getStatut_validation() != null ? diplome.getStatut_validation() : "" %>
-                    <%= "VALIDÉ".equals(diplome.getStatut_validation()) ? "✓" :
-                            "REJETÉ".equals(diplome.getStatut_validation()) ? "✗" : "" %>
-                </td>
-                <td><%= diplome.getDate_traitement() != null ? diplome.getDate_traitement() : "N/A" %></td>
-            </tr>
-            <% } %>
-            </tbody>
-        </table>
-        <% } else { %>
-        <p class="empty-message">Aucun diplôme dans l'historique</p>
-        <% } %>
-    </div>
+        <!-- Data Tables -->
+        <div class="content-grid">
+            <!-- Pending Validation Requests -->
+            <section class="section-card">
+                <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24"
+                         fill="none" stroke="#f39c12"
+                         stroke-width="2.5" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16">
+                        </line>
+                    </svg>
+                    Diplômes à vérifier
+                </h3>
+                <div class="data-table-wrapper">
+                    <% if (diplomesEnAttente !=null &&
+                            !diplomesEnAttente.isEmpty()) { %>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Libellé</th>
+                            <th>Candidat</th>
+                            <th>Justificatif</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <% for (Diplome d :
+                                diplomesEnAttente) { %>
+                        <tr>
+                            <td><strong>
+                                <%= d.getLibelle()
+                                %>
+                            </strong></td>
+                            <td>ID #<%=
+                            d.getId_candidat()
+                            %>
+                            </td>
+                            <td><span
+                                    style="color: #666; font-size: 0.85rem;">
+                                                                                                    <%= d.getDocument_justificatif()
+                                                                                                    %>
+                                                                                                </span></td>
+                            <td
+                                    style="white-space: nowrap;">
+                                <form
+                                        action="<%= request.getContextPath() %>/universite-dashboard"
+                                        method="post"
+                                        style="display:inline;">
+                                    <input type="hidden"
+                                           name="action"
+                                           value="valider">
+                                    <input type="hidden"
+                                           name="id_diplome"
+                                           value="<%= d.getId_diplome() %>">
+                                    <input type="hidden"
+                                           name="id_universite"
+                                           value="<%= universite.getId_universite() %>">
+                                    <button
+                                            type="submit"
+                                            class="btn-small btn-approve"
+                                            onclick="return confirm('Confirmer la validation ?')">Valider</button>
+                                </form>
+                                <form
+                                        action="<%= request.getContextPath() %>/universite-dashboard"
+                                        method="post"
+                                        style="display:inline; margin-left: 5px;">
+                                    <input type="hidden"
+                                           name="action"
+                                           value="rejeter">
+                                    <input type="hidden"
+                                           name="id_diplome"
+                                           value="<%= d.getId_diplome() %>">
+                                    <input type="hidden"
+                                           name="id_universite"
+                                           value="<%= universite.getId_universite() %>">
+                                    <button
+                                            type="submit"
+                                            class="btn-small btn-deny"
+                                            onclick="return confirm('Confirmer le rejet ?')">Rejeter</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <% } %>
+                        </tbody>
+                    </table>
+                    <% } else { %>
+                    <div class="no-data">Aucune demande en
+                        attente.</div>
+                    <% } %>
+                </div>
+            </section>
+
+            <!-- Processed History -->
+            <section class="section-card">
+                <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24"
+                         fill="none" stroke="var(--text-light)"
+                         stroke-width="2.5" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <path
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z">
+                        </path>
+                    </svg>
+                    Traités récemment
+                </h3>
+                <div class="data-table-wrapper">
+                    <% if (diplomesHistorique !=null &&
+                            !diplomesHistorique.isEmpty()) { %>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Diplôme</th>
+                            <th>Date Traitement</th>
+                            <th>Statut</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <% for (Diplome d :
+                                diplomesHistorique) { boolean
+                                isOk="VALIDÉ"
+                                .equalsIgnoreCase(d.getStatut_validation());
+                            String badgeClass=isOk
+                                    ? "badge-success"
+                                    : "badge-danger" ; String
+                                    symbol=isOk ? "✓" : "✕" ; %>
+                        <tr>
+                            <td>
+                                <div
+                                        style="font-weight: 600;">
+                                    <%= d.getLibelle()
+                                    %>
+                                </div>
+                                <div
+                                        style="font-size: 0.8rem; color: #999;">
+                                    Candidat #<%=
+                                d.getId_candidat()
+                                %>
+                                </div>
+                            </td>
+                            <td><span
+                                    style="font-size: 0.9rem;">
+                                                                                                    <%= (d.getDate_traitement()
+                                                                                                            !=null) ?
+                                                                                                            d.getDate_traitement()
+                                                                                                            : "-" %>
+                                                                                                </span></td>
+                            <td>
+                                                                                                <span
+                                                                                                        class="badge <%= badgeClass %>">
+                                                                                                    <%= symbol %>
+                                                                                                        <%= d.getStatut_validation()
+                                                                                                        %>
+                                                                                                </span>
+                            </td>
+                        </tr>
+                        <% } %>
+                        </tbody>
+                    </table>
+                    <% } else { %>
+                    <div class="no-data">Aucun historique
+                        disponible.</div>
+                    <% } %>
+                </div>
+            </section>
+        </div>
+    </main>
 </div>
-
-<div class="stats">
-    <p><strong>Statistiques:</strong></p>
-    <p>• Demandes en attente: <%= diplomesEnAttente != null ? diplomesEnAttente.size() : 0 %></p>
-    <p>• Diplômes traités: <%= diplomesHistorique != null ? diplomesHistorique.size() : 0 %></p>
-    <p>• Total diplômes: <%= (diplomesEnAttente != null ? diplomesEnAttente.size() : 0) +
-            (diplomesHistorique != null ? diplomesHistorique.size() : 0) %></p>
-</div>
-
-<div style="text-align: center; margin-top: 20px;">
-    <a href="<%= request.getContextPath() %>/logout">Déconnexion</a>
-</div>
-
 </body>
+
 </html>
