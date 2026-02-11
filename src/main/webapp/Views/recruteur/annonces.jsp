@@ -69,7 +69,6 @@
                             <!-- Header -->
                             <div class="mb-4">
                                 <h3 class="text-lg font-bold text-slate-900">${annonce.titre}</h3>
-                                <p class="text-sm text-slate-600">${annonce.entreprise}</p>
                             </div>
 
                             <!-- Tags -->

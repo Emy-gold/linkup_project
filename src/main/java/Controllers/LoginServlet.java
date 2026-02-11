@@ -23,17 +23,9 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         try {
-            utilisateur u = userDAO.login(req.getParameter("email"), req.getParameter("password"));
+            utilisateur u = userDAO.login(req.getParameter("email"),req.getParameter("password"));
 
-            if (u != null) {
-                // Security Check: Block ONLY suspended users (except Admins) for Dev phase
-                // TODO: Réactiver la restriction EN_ATTENTE pour la production
-                if ("SUSPENDU".equals(u.getStatutCompte()) && !"ADMIN".equals(u.getRole())) {
-                    req.setAttribute("error", "Votre compte est suspendu. Contactez l'administrateur.");
-                    req.getRequestDispatcher("login.jsp").forward(req, resp);
-                    return;
-                }
-
+            if( u != null){
                 HttpSession session = req.getSession();
                 session.setAttribute("user", u);
                 session.setAttribute("userId", u.getIdUtilisateur());
@@ -45,19 +37,29 @@ public class LoginServlet extends HttpServlet {
                         resp.sendRedirect(req.getContextPath() + "/candidat/dashboard");
                         break;
                     case "RECRUTEUR":
-                        RecruteurDAO recruteurDAO = new RecruteurDAOImpl();
 
+                        RecruteurDAO recruteurDAO = new RecruteurDAOImpl();
                         int userId = u.getIdUtilisateur();
-                        if (recruteurDAO.existsByUserId(userId)) {
+                        Recruteur recruteur = recruteurDAO.getByUserId(userId);
+
+
+                        if (recruteur != null) {
+
+                            // STOCKER EN SESSION (IMPORTANT)
+                            session.setAttribute("recruteur", recruteur);
+                            session.setAttribute("recruteurId", recruteur.getRecruteurId());
+
                             resp.sendRedirect(req.getContextPath() + "/recruteur/dashboard");
+
                         } else {
-                            resp.sendRedirect(req.getContextPath() + "/Views/recruteur/complete-profile.jsp");
+                            resp.sendRedirect(req.getContextPath() + "/recruteur/complete-profile");
                         }
 
                         break;
 
+
                     case "ADMIN":
-                        resp.sendRedirect(req.getContextPath() + "/admin/dashboard?tab=dashboard");
+                        resp.sendRedirect("Views/admin/dashboard.jsp");
                         break;
                     case "AGENT_UNIV":
                         resp.sendRedirect("Views/universite/dashboard.jsp");
@@ -66,7 +68,7 @@ public class LoginServlet extends HttpServlet {
                         resp.sendRedirect("/login.jsp?error=invalid_role");
                         break;
                 }
-            } else {
+            }else {
                 resp.sendRedirect("login.jsp?error=true");
             }
         } catch (Exception e) {

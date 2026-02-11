@@ -29,7 +29,7 @@
 <!-- Top Bar -->
 <div class="bg-surface-light border-b border-slate-200 sticky top-0 z-40">
     <div class="px-8 py-4 flex justify-between items-center">
-        <h1 class="text-2xl font-bold text-slate-900">${pageTitle}</h1>
+        <h1 class="text-2xl font-bold text-slate-900">${param.pageTitle}</h1>
         <div class="flex items-center space-x-4">
             <span class="text-sm text-slate-600">
                 <c:if test="${not empty user}">
