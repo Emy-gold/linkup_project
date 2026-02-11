@@ -20,7 +20,7 @@ public class AnnonceServlet extends HttpServlet {
     private AnnonceDAO annonceDAO;
 
     @Override
-    public void init(){
+    public void init() {
         annonceDAO = new AnnonceDAOImpl();
     }
 
@@ -43,11 +43,7 @@ public class AnnonceServlet extends HttpServlet {
 
         if (action == null || action.equals("/")) {
             listAnnonces(request, response, recruteurId);
-        }
-        else if (action.equals("/edit")) {
-            showEditForm(request, response);
-        }
-        else if (action.equals("/delete")) {
+        } else if (action.equals("/delete")) {
             deleteAnnonce(request, response);
         }
     }
@@ -72,8 +68,7 @@ public class AnnonceServlet extends HttpServlet {
 
         if (action == null || action.equals("/")) {
             createAnnonce(request, response, recruteurId);
-        }
-        else if (action.equals("/update")) {
+        } else if (action.equals("/update")) {
             updateAnnonce(request, response);
         }
     }
@@ -110,25 +105,11 @@ public class AnnonceServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/recruteur/annonces");
     }
 
-    // Edit Form Annonce
-    private void showEditForm(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        int id = Integer.parseInt(request.getParameter("id"));
-
-        Annonce annonce = annonceDAO.getById(id);
-
-        request.setAttribute("annonce", annonce);
-
-        request.getRequestDispatcher("/Views/recruteur/edit-annonce.jsp")
-                .forward(request, response);
-    }
-
-    //update Annonce
+    // update Annonce
     private void updateAnnonce(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
-        int id = Integer.parseInt(request.getParameter("id_annonce"));
+        int id = Integer.parseInt(request.getParameter("idAnnonce"));
 
         Annonce annonce = annonceDAO.getById(id);
 
@@ -142,7 +123,7 @@ public class AnnonceServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/recruteur/annonces");
     }
 
-    //DeleteAnnonce:
+    // DeleteAnnonce:
     private void deleteAnnonce(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
@@ -152,8 +133,5 @@ public class AnnonceServlet extends HttpServlet {
 
         response.sendRedirect(request.getContextPath() + "/recruteur/annonces");
     }
-
-
-
 
 }

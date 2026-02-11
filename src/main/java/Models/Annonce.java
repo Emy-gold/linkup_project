@@ -86,5 +86,6 @@ public class Annonce {
     }
 
     public void setRecruteurId(int recruteurId) {
+        this.id_recruteur = recruteurId;
     }
 }

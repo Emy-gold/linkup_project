@@ -44,7 +44,7 @@ public class AnnonceDAOImpl implements AnnonceDAO {
     @Override
     public List<Annonce> getAll() {
         List<Annonce> list = new ArrayList<>();
-        String sql = "SELECT * FROM annonce WHERE statut_annonce = 'ACTIVE' ORDER BY date_publication DESC";
+        String sql = "SELECT * FROM annonce WHERE statut_annonce = 'PUBLIEE' ORDER BY date_publication DESC";
         try (Connection conn = ConnexionDB.getConnection();
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql)) {
@@ -105,7 +105,7 @@ public class AnnonceDAOImpl implements AnnonceDAO {
     @Override
     public List<Annonce> search(String keyword) {
         List<Annonce> list = new ArrayList<>();
-        String sql = "SELECT * FROM annonce WHERE (titre LIKE ? OR description LIKE ?) AND statut_annonce = 'Publiée'";
+        String sql = "SELECT * FROM annonce WHERE (titre LIKE ? OR description LIKE ?) AND statut_annonce = 'PUBLIEE'";
         try (Connection conn = ConnexionDB.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
             String searchPattern = "%" + keyword + "%";
@@ -124,7 +124,7 @@ public class AnnonceDAOImpl implements AnnonceDAO {
     @Override
     public List<Annonce> getByTypeContrat(String typeContrat) {
         List<Annonce> list = new ArrayList<>();
-        String sql = "SELECT * FROM annonce WHERE type_contrat = ? AND statut_annonce = 'Publiée'";
+        String sql = "SELECT * FROM annonce WHERE type_contrat = ? AND statut_annonce = 'PUBLIEE'";
         try (Connection conn = ConnexionDB.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, typeContrat);
@@ -141,7 +141,7 @@ public class AnnonceDAOImpl implements AnnonceDAO {
     @Override
     public List<Annonce> getRecent(int limit) {
         List<Annonce> list = new ArrayList<>();
-        String sql = "SELECT * FROM annonce WHERE statut_annonce = 'Publiée' ORDER BY date_publication DESC LIMIT ?";
+        String sql = "SELECT * FROM annonce WHERE statut_annonce = 'PUBLIEE' ORDER BY date_publication DESC LIMIT ?";
         try (Connection conn = ConnexionDB.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, limit);
@@ -157,6 +157,22 @@ public class AnnonceDAOImpl implements AnnonceDAO {
 
     @Override
     public int countPending() throws Exception {
+        return 0;
+    }
+
+    @Override
+    public int countByRecruteurId(int recruteurId) {
+        String sql = "SELECT COUNT(*) FROM annonce WHERE id_recruteur = ?";
+        try (Connection conn = ConnexionDB.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, recruteurId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return 0;
     }
 
