@@ -2,17 +2,48 @@ package DAO;
 
 import Models.utilisateur;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 
 public class UtilisateurDaoIMP implements UtilisateurDAO {
 
-    public static void create(utilisateur u) throws Exception {
+    public void create(utilisateur u) {
+        String sql = "INSERT INTO utilisateur (email, password, nom, prenom, role, date_inscription, statut_compte) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = ConnexionDB.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-        String sql = "INSERT INTO utilisateur " +
-                "(email,password,nom,prenom,role,date_inscription,statut_compte) "
-                + "VALUES(?,?,?,?,?,?,?)";
+            stmt.setString(1, u.getEmail());
+            stmt.setString(2, u.getPassword());
+            stmt.setString(3, u.getNom());
+            stmt.setString(4, u.getPrenom());
+            stmt.setString(5, u.getRole());
+            stmt.setDate(6, new java.sql.Date(u.getDate().getTime()));
+            stmt.setString(7, u.getStatutCompte());
+
+            int rows = stmt.executeUpdate();
+            System.out.println("Utilisateur inserted: " + rows + " row(s)");
+
+            // ⭐ RÉCUPÉRER L'ID GÉNÉRÉ
+            ResultSet generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int generatedId = generatedKeys.getInt(1);
+                u.setIdUtilisateur(generatedId);
+                System.out.println("✅ ID généré: " + generatedId);
+            } else {
+                System.out.println("❌ Aucun ID généré!");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("❌ Erreur création utilisateur: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static void update(utilisateur u) throws Exception {
+
+        String sql = "UPDATE utilisateur SET " +
+                "email=?, password=?, nom=?, prenom=?, role=?, date_inscription=?, statut_compte=? " +
+                "WHERE id_utilisateur=?";
+
         Connection cn = ConnexionDB.getConnection();
         PreparedStatement ps = cn.prepareStatement(sql);
 
@@ -24,8 +55,11 @@ public class UtilisateurDaoIMP implements UtilisateurDAO {
         ps.setDate(6, new java.sql.Date(u.getDate().getTime()));
         ps.setString(7, u.getStatutCompte());
 
+        ps.setInt(8, u.getIdUtilisateur()); // important: primary key
+
         ps.executeUpdate();
     }
+
 
     public utilisateur login(String email, String password) throws Exception {
 

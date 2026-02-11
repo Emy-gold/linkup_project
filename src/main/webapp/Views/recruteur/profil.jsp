@@ -49,16 +49,16 @@
             <div class="bg-surface-light border border-slate-200 rounded-lg p-8">
                 <div class="text-center mb-6">
                     <div class="w-24 h-24 rounded-full bg-primary text-white flex items-center justify-center font-bold text-3xl mx-auto mb-4">
-                        R
+                        ${user.nom.charAt(0)}${user.prenom.charAt(0)}
                     </div>
-                    <h2 class="text-2xl font-bold text-slate-900">ayman</h2>
-                    <p class="text-slate-600 mt-1">fdfgdfg</p>
+                    <h2 class="text-2xl font-bold text-slate-900"></h2>
+                    <p class="text-slate-600 mt-1"></p>
                 </div>
 
                 <div class="space-y-4 border-t border-slate-200 pt-6">
                     <div>
                         <p class="text-xs text-slate-600 font-medium uppercase">Email</p>
-                        <p class="text-slate-900 mt-1">fggfgg</p>
+                        <p class="text-slate-900 mt-1">${user.email}</p>
                     </div>
                     <div>
                         <p class="text-xs text-slate-600 font-medium uppercase">Téléphone</p>
@@ -70,7 +70,7 @@
                     </div>
                     <div>
                         <p class="text-xs text-slate-600 font-medium uppercase">Inscrit depuis</p>
-                        <p class="text-slate-900 mt-1">15</p>
+                        <p class="text-slate-900 mt-1">${user.date}</p>
                     </div>
                 </div>
 
@@ -108,7 +108,7 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-slate-700 mb-2">Entreprise</label>
-                                <input type="text" value="${user.entreprise}" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none">
+                                <input type="text" value="${recruteur.nomEntreprise}" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none">
                             </div>
                         </div>
 

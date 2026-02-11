@@ -26,5 +26,7 @@ public interface AnnonceDAO {
 
     int countPending() throws Exception;
 
+    int countByRecruteurId(int recruteurId);
+
     java.util.List<java.util.Map<String, Object>> findAllWithCompany() throws Exception;
 }

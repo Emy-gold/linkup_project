@@ -6,22 +6,22 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CandidatureDAOImpl implements CandidatureDAO{
+public class CandidatureDAOImpl implements CandidatureDAO {
 
-    //la methode create pour ajouter une candidature
+    // la methode create pour ajouter une candidature
     @Override
     public void create(Candidature c) {
 
         String sql = "INSERT INTO candidature(id_candidat,id_annonce,date_soumission,statut_candidature,lettre_motivation) VALUES(?,?,?,?,?)";
-        try(Connection con= ConnexionDB.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql);){
+        try (Connection con = ConnexionDB.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql);) {
             ps.setInt(1, c.getCandidatId());
             ps.setInt(2, c.getAnnonceId());
-            ps.setDate(3,new java.sql.Date(c.getDateSoumission().getTime()));
+            ps.setDate(3, new java.sql.Date(c.getDateSoumission().getTime()));
             ps.setString(4, c.getStatutCandidature());
-            ps.setString(5,c.getLettreMotivation());
+            ps.setString(5, c.getLettreMotivation());
             ps.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -29,14 +29,14 @@ public class CandidatureDAOImpl implements CandidatureDAO{
     @Override
     public Candidature getById(int id) {
         String sql = "SELECT * FROM candidature WHERE id_candidature=?";
-        try(Connection con = ConnexionDB.getConnection();
-        PreparedStatement ps = con.prepareStatement(sql)){
-            ps.setInt(1,id);
+        try (Connection con = ConnexionDB.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 return extractFromResultSet(rs);
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -46,14 +46,13 @@ public class CandidatureDAOImpl implements CandidatureDAO{
     public List<Candidature> getAll() {
         List<Candidature> list = new ArrayList<>();
         String sql = "SELECT * FROM candidature";
-        try(Connection con = ConnexionDB.getConnection();
-        Statement stmt = con.createStatement();
-        ResultSet rs = stmt.executeQuery(sql);)
-        {
-            while(rs.next()){
+        try (Connection con = ConnexionDB.getConnection();
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);) {
+            while (rs.next()) {
                 list.add(extractFromResultSet(rs));
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -63,12 +62,11 @@ public class CandidatureDAOImpl implements CandidatureDAO{
     @Override
     public void update(Candidature c) {
         String sql = "UPDATE candidature SET statut_candidature=?, lettre_motivation=? WHERE id_candidature = ?";
-        try(Connection con = ConnexionDB.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql);
-        ){
-            ps.setString(1,c.getStatutCandidature());
-            ps.setString(2,c.getLettreMotivation());
-            ps.setInt(3,c.getId());
+        try (Connection con = ConnexionDB.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql);) {
+            ps.setString(1, c.getStatutCandidature());
+            ps.setString(2, c.getLettreMotivation());
+            ps.setInt(3, c.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -79,9 +77,9 @@ public class CandidatureDAOImpl implements CandidatureDAO{
     @Override
     public void delete(int id) {
         String sql = "DELETE FROM candidature WHERE id_candidature=?";
-        try ( Connection con = ConnexionDB.getConnection();
-              PreparedStatement ps = con.prepareStatement(sql)){
-            ps.setInt(1,id);
+        try (Connection con = ConnexionDB.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -93,10 +91,10 @@ public class CandidatureDAOImpl implements CandidatureDAO{
         List<Candidature> list = new ArrayList<>();
         String sql = "SELECT * FROM candidature WHERE id_candidat=? ORDER BY date_soumission DESC";
         try (Connection con = ConnexionDB.getConnection();
-        PreparedStatement ps = con.prepareStatement(sql)){
-            ps.setInt(1,candidatId);
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, candidatId);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 list.add(extractFromResultSet(rs));
             }
         } catch (SQLException e) {
@@ -110,13 +108,13 @@ public class CandidatureDAOImpl implements CandidatureDAO{
         List<Candidature> list = new ArrayList<>();
         String sql = "SELECT * FROM candidature WHERE id_annonce=?";
         try (Connection con = ConnexionDB.getConnection();
-        PreparedStatement ps = con.prepareStatement(sql);){
-            ps.setInt(1,annonceId);
+                PreparedStatement ps = con.prepareStatement(sql);) {
+            ps.setInt(1, annonceId);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 list.add(extractFromResultSet(rs));
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return list;
@@ -126,15 +124,15 @@ public class CandidatureDAOImpl implements CandidatureDAO{
     public List<Candidature> getByCandidatureIdAndStatut(int candidatId, String statut) {
         String sql = "SELECT * FROM candidature WHERE id_candidat=? AND statut_candidature=?";
         List<Candidature> list = new ArrayList<>();
-        try(Connection con = ConnexionDB.getConnection();
-        PreparedStatement ps = con.prepareStatement(sql)){
-            ps.setInt(1,candidatId);
-            ps.setString(2,statut);
+        try (Connection con = ConnexionDB.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, candidatId);
+            ps.setString(2, statut);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 list.add(extractFromResultSet(rs));
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return list;
@@ -145,7 +143,7 @@ public class CandidatureDAOImpl implements CandidatureDAO{
         List<Candidature> list = new ArrayList<>();
         String sql = "SELECT * FROM candidature WHERE id_candidat = ? ORDER BY date_soumission DESC LIMIT ?";
         try (Connection conn = ConnexionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, candidatId);
             stmt.setInt(2, limit);
             ResultSet rs = stmt.executeQuery();
@@ -162,7 +160,7 @@ public class CandidatureDAOImpl implements CandidatureDAO{
     public int countByCandidatId(int candidatId) {
         String sql = "SELECT COUNT(*) FROM candidature WHERE id_candidat = ?";
         try (Connection conn = ConnexionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, candidatId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -174,7 +172,23 @@ public class CandidatureDAOImpl implements CandidatureDAO{
         return 0;
     }
 
-    //recuperation des donnees
+    @Override
+    public int countByRecruteurId(int recruteurId) {
+        String sql = "SELECT COUNT(*) FROM candidature c JOIN annonce a ON c.id_annonce = a.id_annonce WHERE a.id_recruteur = ?";
+        try (Connection conn = ConnexionDB.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, recruteurId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // recuperation des donnees
     private Candidature extractFromResultSet(ResultSet rs) throws SQLException {
         Candidature c = new Candidature();
         c.setId(rs.getInt("id_candidature"));
