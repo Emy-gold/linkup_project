@@ -76,9 +76,7 @@
                                     <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
                                             ${annonce.typeContrat}
                                     </span>
-                                <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">
-                                        ${annonce.localisation}
-                                </span>
+
                             </div>
 
                             <!-- Description -->
@@ -86,17 +84,7 @@
                                     ${annonce.description}
                             </p>
 
-                            <!-- Stats -->
-                            <div class="grid grid-cols-2 gap-4 mb-4 pb-4 border-b border-slate-200">
-                                <div>
-                                    <p class="text-xs text-slate-600">Candidatures</p>
-                                    <p class="text-lg font-bold text-slate-900">${annonce.candidatures}</p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-slate-600">Vues</p>
-                                    <p class="text-lg font-bold text-slate-900">${annonce.vues}</p>
-                                </div>
-                            </div>
+
 
                             <!-- Actions -->
                             <div class="flex gap-2">
@@ -173,7 +161,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-2">Description du Poste *</label>
-                <textarea name="descriptionPoste" rows="5" required placeholder="Décrivez les responsabilités et compétences requises..."
+                <textarea name="description" rows="5" required placeholder="Décrivez les responsabilités et compétences requises..."
                           class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"></textarea>
             </div>
 
