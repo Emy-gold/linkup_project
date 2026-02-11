@@ -4,9 +4,9 @@ import Models.utilisateur;
 
 public interface UtilisateurDAO {
 
-    public static void create(utilisateur u) throws Exception {
-        UtilisateurDaoIMP.create(u);
-    }
+    public void create(utilisateur u);
+
+    public static void update(utilisateur u) throws Exception {}
 
     public java.util.List<utilisateur> findAllUsers() throws Exception;
 

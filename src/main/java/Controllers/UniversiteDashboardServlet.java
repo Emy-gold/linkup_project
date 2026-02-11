@@ -1,6 +1,6 @@
 package Controllers;
 
-import DAO.DiplomeDAO;
+import DAO.DiplomeDAOImpl;
 import DAO.UniversiteDAO;
 import Models.Diplome;
 import Models.Universite;
@@ -18,12 +18,12 @@ import jakarta.servlet.RequestDispatcher;
 
 @WebServlet("/universite-dashboard")
 public class UniversiteDashboardServlet extends HttpServlet {
-    private DiplomeDAO diplomeDAO;
+    private DiplomeDAOImpl diplomeDAO;
     private UniversiteDAO universiteDAO;
 
     @Override
     public void init() throws ServletException {
-        this.diplomeDAO = new DiplomeDAO();
+        this.diplomeDAO = new DiplomeDAOImpl();
         this.universiteDAO = new UniversiteDAO();
     }
 
