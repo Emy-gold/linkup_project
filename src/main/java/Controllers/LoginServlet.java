@@ -64,7 +64,14 @@ public class LoginServlet extends HttpServlet {
                         resp.sendRedirect(req.getContextPath() + "/admin/dashboard?tab=dashboard");
                         break;
                     case "AGENT_UNIV":
-                        resp.sendRedirect("Views/universite/dashboard.jsp");
+                        DAO.UniversiteDAO univDAO = new DAO.UniversiteDAOImpl();
+                        Models.Universite univ = univDAO.getUniversiteByAgentId(u.getIdUtilisateur());
+                        if (univ != null) {
+                            session.setAttribute("universite", univ);
+                            resp.sendRedirect(req.getContextPath() + "/universite-dashboard");
+                        } else {
+                            resp.sendRedirect(req.getContextPath() + "/universite-complete-profile");
+                        }
                         break;
                     default:
                         resp.sendRedirect("/login.jsp?error=invalid_role");
