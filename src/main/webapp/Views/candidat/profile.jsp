@@ -297,13 +297,13 @@
 
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-2">Université / École</label>
-                <select name="universiteId" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                <select name="id_universite" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
                     <option value="">-- Sélectionner une université --</option>
                     <%
                         if(universites != null && !universites.isEmpty()) {
                             for(Universite univ : universites) {
                     %>
-                    <option value="<%= univ.getIdUtilisateur() %>"><%= univ.getNomUniversite() %></option>
+                    <option value="<%= univ.getId_universite() %>"><%= univ.getNomUniversite() %></option>
                     <%
                         }
                     } else {

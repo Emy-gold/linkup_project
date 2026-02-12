@@ -89,6 +89,7 @@ public class ProfileServlet extends HttpServlet {
             } else if("addDiplome".equals(action)) {
                 // Add diplome
                 String libelle = req.getParameter("libelle");
+                String universiteIdStr = req.getParameter("id_universite"); // ✅ AJOUT : Récupérer l'ID de l'université
                 Part filePart = req.getPart("documentJustificatif");
 
                 String uploadPath = getServletContext().getRealPath("") + "uploads" + File.separator + "diplomes";
@@ -106,6 +107,11 @@ public class ProfileServlet extends HttpServlet {
                 diplome.setDocument_justificatif("uploads/diplomes/" + fileName);
                 diplome.setStatut_validation("En attente");
                 diplome.setId_candidat(user.getIdUtilisateur());
+
+                // ✅ AJOUT : Définir l'ID de l'université
+                if(universiteIdStr != null && !universiteIdStr.isEmpty()) {
+                    diplome.setId_universite(Integer.parseInt(universiteIdStr));
+                }
 
                 diplomeDAO.create(diplome);
                 resp.sendRedirect("profile?success=diplome");
