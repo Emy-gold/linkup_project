@@ -177,7 +177,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-bold text-slate-700 mb-2">Description</label>
-                            <textarea name="descriptionPoste" rows="4" required placeholder="Détails du poste..."
+                            <textarea name="description" rows="4" required placeholder="Détails du poste..."
                                 class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all"></textarea>
                         </div>
                         <div class="flex gap-4 pt-4">
