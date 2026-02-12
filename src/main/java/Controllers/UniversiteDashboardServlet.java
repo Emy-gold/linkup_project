@@ -36,7 +36,7 @@ public class UniversiteDashboardServlet extends HttpServlet {
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
-        }
+        }   
 
         // Vérifier si c'est un agent universitaire
         utilisateur user = (utilisateur) session.getAttribute("user");

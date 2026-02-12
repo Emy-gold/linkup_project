@@ -416,6 +416,95 @@
                                                 gap: 12px;
                                                 border: 1px solid rgba(231, 76, 60, 0.15);
                                             }
+
+                                            /* Modal Styles */
+                                            .modal-overlay {
+                                                display: none;
+                                                position: fixed;
+                                                top: 0;
+                                                left: 0;
+                                                width: 100%;
+                                                height: 100%;
+                                                background: rgba(0, 0, 0, 0.7);
+                                                backdrop-filter: blur(5px);
+                                                z-index: 1000;
+                                                justify-content: center;
+                                                align-items: center;
+                                                padding: 20px;
+                                            }
+
+                                            .modal-content {
+                                                background: var(--white);
+                                                width: 100%;
+                                                max-width: 900px;
+                                                height: 85vh;
+                                                border-radius: var(--border-radius);
+                                                position: relative;
+                                                display: flex;
+                                                flex-direction: column;
+                                                overflow: hidden;
+                                                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+                                            }
+
+                                            .modal-header {
+                                                padding: 1.2rem 1.5rem;
+                                                border-bottom: 1px solid #eee;
+                                                display: flex;
+                                                justify-content: space-between;
+                                                align-items: center;
+                                            }
+
+                                            .modal-header h3 {
+                                                font-size: 1.1rem;
+                                                color: var(--text-dark);
+                                            }
+
+                                            .close-modal {
+                                                background: none;
+                                                border: none;
+                                                font-size: 1.8rem;
+                                                cursor: pointer;
+                                                color: var(--text-light);
+                                                transition: color 0.2s;
+                                            }
+
+                                            .close-modal:hover {
+                                                color: var(--danger-color);
+                                            }
+
+                                            .document-viewer {
+                                                flex: 1;
+                                                width: 100%;
+                                                height: 100%;
+                                                border: none;
+                                            }
+
+                                            .viewer-img {
+                                                width: 100%;
+                                                height: 100%;
+                                                object-fit: contain;
+                                                background: #f0f0f0;
+                                            }
+
+                                            .btn-view {
+                                                padding: 6px 12px;
+                                                background: #f0f7ff;
+                                                color: #007bff;
+                                                border: 1px solid #007bff20;
+                                                border-radius: 6px;
+                                                font-size: 0.85rem;
+                                                display: inline-flex;
+                                                align-items: center;
+                                                gap: 5px;
+                                                text-decoration: none;
+                                                transition: all 0.2s;
+                                                cursor: pointer;
+                                            }
+
+                                            .btn-view:hover {
+                                                background: #007bff;
+                                                color: white;
+                                            }
                                         </style>
                                     </head>
 
@@ -607,11 +696,29 @@
                                                                                                     d.getId_candidat()
                                                                                                     %>
                                                                                             </td>
-                                                                                            <td><span
-                                                                                                    style="color: #666; font-size: 0.85rem;">
-                                                                                                    <%= d.getDocument_justificatif()
-                                                                                                        %>
-                                                                                                </span></td>
+                                                                                            <td>
+                                                                                                <button type="button"
+                                                                                                    class="btn-view"
+                                                                                                    onclick="viewDocument('<%= request.getContextPath() %>/<%= d.getDocument_justificatif() %>', '<%= d.getLibelle() %>')">
+                                                                                                    <svg width="14"
+                                                                                                        height="14"
+                                                                                                        viewBox="0 0 24 24"
+                                                                                                        fill="none"
+                                                                                                        stroke="currentColor"
+                                                                                                        stroke-width="2"
+                                                                                                        stroke-linecap="round"
+                                                                                                        stroke-linejoin="round">
+                                                                                                        <path
+                                                                                                            d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z">
+                                                                                                        </path>
+                                                                                                        <circle cx="12"
+                                                                                                            cy="12"
+                                                                                                            r="3">
+                                                                                                        </circle>
+                                                                                                    </svg>
+                                                                                                    Voir le diplôme
+                                                                                                </button>
+                                                                                            </td>
                                                                                             <td
                                                                                                 style="white-space: nowrap;">
                                                                                                 <form
@@ -707,10 +814,35 @@
                                                                                                         %>
                                                                                                 </div>
                                                                                                 <div
-                                                                                                    style="font-size: 0.8rem; color: #999;">
-                                                                                                    Candidat #<%=
-                                                                                                        d.getId_candidat()
-                                                                                                        %>
+                                                                                                    style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
+                                                                                                    <span
+                                                                                                        style="font-size: 0.8rem; color: #999;">Candidat
+                                                                                                        #<%= d.getId_candidat()
+                                                                                                            %></span>
+                                                                                                    <button
+                                                                                                        type="button"
+                                                                                                        class="btn-view"
+                                                                                                        style="padding: 2px 8px; font-size: 0.75rem;"
+                                                                                                        onclick="viewDocument('<%= request.getContextPath() %>/<%= d.getDocument_justificatif() %>', '<%= d.getLibelle() %>')">
+                                                                                                        <svg width="12"
+                                                                                                            height="12"
+                                                                                                            viewBox="0 0 24 24"
+                                                                                                            fill="none"
+                                                                                                            stroke="currentColor"
+                                                                                                            stroke-width="2"
+                                                                                                            stroke-linecap="round"
+                                                                                                            stroke-linejoin="round">
+                                                                                                            <path
+                                                                                                                d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z">
+                                                                                                            </path>
+                                                                                                            <circle
+                                                                                                                cx="12"
+                                                                                                                cy="12"
+                                                                                                                r="3">
+                                                                                                            </circle>
+                                                                                                        </svg>
+                                                                                                        Voir
+                                                                                                    </button>
                                                                                                 </div>
                                                                                             </td>
                                                                                             <td><span
@@ -741,6 +873,61 @@
                                                             </div>
                                             </main>
                                         </div>
+
+                                        <!-- Modal de Visualisation -->
+                                        <div id="documentModal" class="modal-overlay">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h3 id="modalTitle">Justificatif de Diplôme</h3>
+                                                    <button class="close-modal" onclick="closeModal()">&times;</button>
+                                                </div>
+                                                <div id="viewerContainer" style="flex: 1; overflow: hidden;">
+                                                    <!-- L'iframe ou l'image sera injecté ici -->
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <script>
+                                            function viewDocument(url, title) {
+                                                const modal = document.getElementById('documentModal');
+                                                const container = document.getElementById('viewerContainer');
+                                                const modalTitle = document.getElementById('modalTitle');
+
+                                                modalTitle.textContent = "Justificatif : " + title;
+
+                                                // Nettoyer le conteneur
+                                                container.innerHTML = '';
+
+                                                const fileExtension = url.split('.').pop().toLowerCase();
+
+                                                if (fileExtension === 'pdf') {
+                                                    const iframe = document.createElement('iframe');
+                                                    iframe.src = url;
+                                                    iframe.className = 'document-viewer';
+                                                    container.appendChild(iframe);
+                                                } else {
+                                                    const img = document.createElement('img');
+                                                    img.src = url;
+                                                    img.className = 'viewer-img';
+                                                    container.appendChild(img);
+                                                }
+
+                                                modal.style.display = 'flex';
+                                            }
+
+                                            function closeModal() {
+                                                const modal = document.getElementById('documentModal');
+                                                modal.style.display = 'none';
+                                            }
+
+                                            // Fermer le modal en cliquant en dehors
+                                            window.onclick = function (event) {
+                                                const modal = document.getElementById('documentModal');
+                                                if (event.target == modal) {
+                                                    closeModal();
+                                                }
+                                            }
+                                        </script>
                                     </body>
 
                                     </html>
