@@ -17,8 +17,10 @@ public class EntretienDAOImpl implements EntretienDAO {
             stmt.setString(3, e.getLieu());
             stmt.setString(4, e.getStatutEntretien());
             stmt.setString(5, e.getNotesRecruteur());
-            stmt.executeUpdate();
+            int rows = stmt.executeUpdate();
+            System.out.println("Entretien inserted: " + rows + " row(s)");
         } catch (SQLException ex) {
+            System.out.println("❌ Error creating entretien: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
@@ -30,9 +32,7 @@ public class EntretienDAOImpl implements EntretienDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return extractFromResultSet(rs);
-            }
+            if (rs.next()) return extractFromResultSet(rs);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -46,9 +46,7 @@ public class EntretienDAOImpl implements EntretienDAO {
         try (Connection conn = ConnexionDB.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                list.add(extractFromResultSet(rs));
-            }
+            while (rs.next()) list.add(extractFromResultSet(rs));
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -93,9 +91,7 @@ public class EntretienDAOImpl implements EntretienDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, candidatId);
             ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                list.add(extractFromResultSet(rs));
-            }
+            while (rs.next()) list.add(extractFromResultSet(rs));
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -114,9 +110,7 @@ public class EntretienDAOImpl implements EntretienDAO {
             stmt.setInt(1, candidatId);
             stmt.setInt(2, limit);
             ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                list.add(extractFromResultSet(rs));
-            }
+            while (rs.next()) list.add(extractFromResultSet(rs));
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -132,9 +126,7 @@ public class EntretienDAOImpl implements EntretienDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, candidatId);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
+            if (rs.next()) return rs.getInt(1);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

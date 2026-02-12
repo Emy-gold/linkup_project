@@ -1,6 +1,7 @@
 package Controllers.candidat;
 
 import DAO.*;
+import Models.Universite;
 import Models.utilisateur;
 import Models.Candidat;
 import Models.Diplome;
@@ -23,7 +24,8 @@ public class ProfileServlet extends HttpServlet {
 
     private UtilisateurDAO utilisateurDAO = new UtilisateurDaoIMP();
     private CandidatDAO candidatDAO = new CandidatDAOImpl();
-    private DiplomeDAOImpl diplomeDAO = new DiplomeDAOImpl();
+    private diplomeDAO diplomeDAO = new DiplomeDAOImpl();
+    private UniversiteDAO universiteDAO = new UniversiteDAOImpl();
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
@@ -41,6 +43,10 @@ public class ProfileServlet extends HttpServlet {
         // Get diplomes
         List<Diplome> diplomes = diplomeDAO.getByCandidatId(user.getIdUtilisateur());
         req.setAttribute("diplomes", diplomes);
+
+        // Get universites pour la liste déroulante
+        List<Universite> universites = universiteDAO.getAllUniversites();
+        req.setAttribute("universites", universites);
 
         req.getRequestDispatcher("/Views/candidat/profile.jsp").forward(req, resp);
     }

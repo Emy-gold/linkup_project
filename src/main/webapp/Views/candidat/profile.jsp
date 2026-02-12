@@ -3,6 +3,7 @@
 <%@ page import="Models.Candidat" %>
 <%@ page import="Models.Diplome" %>
 <%@ page import="java.util.List" %>
+<%@ page import="Models.Universite" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%
     utilisateur user = (utilisateur) session.getAttribute("user");
@@ -13,6 +14,7 @@
 
     Candidat candidatInfo = (Candidat) request.getAttribute("candidat");
     List<Diplome> diplomes = (List<Diplome>) request.getAttribute("diplomes");
+    List<Universite> universites = (List<Universite>) request.getAttribute("universites");
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 %>
 <!DOCTYPE html>
@@ -247,17 +249,17 @@
                                 </div>
                                 <span class="px-3 py-1 <%= statutClass %> rounded-full text-xs font-medium flex items-center gap-1">
                                         <span class="material-icons text-xs"><%= statutIcon %></span>
-                                        <%= d.getStatut_validation() %>
+                                        <%= d.getStatut_validation()%>
                                     </span>
                                 <div class="flex gap-2">
                                     <% if(d.getDocument_justificatif() != null) { %>
-                                    <a href="<%= request.getContextPath() + "/" + d.getDocument_justificatif()%>" target="_blank" class="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100">
+                                    <a href="<%= request.getContextPath() + "/" + d.getDocument_justificatif() %>" target="_blank" class="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100">
                                         <span class="material-icons text-sm">visibility</span>
                                     </a>
                                     <% } %>
                                     <form action="profile" method="post" onsubmit="return confirm('Supprimer ce diplôme?')">
                                         <input type="hidden" name="action" value="deleteDiplome">
-                                        <input type="hidden" name="diplomeId" value="<%= d.getId_diplome() %>">
+                                        <input type="hidden" name="diplomeId" value="<%= d.getId_diplome()%>">
                                         <button type="submit" class="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100">
                                             <span class="material-icons text-sm">delete</span>
                                         </button>
@@ -291,6 +293,24 @@
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-2">Nom du diplôme</label>
                 <input type="text" name="libelle" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Ex: Licence en Informatique">
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Université / École</label>
+                <select name="universiteId" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option value="">-- Sélectionner une université --</option>
+                    <%
+                        if(universites != null && !universites.isEmpty()) {
+                            for(Universite univ : universites) {
+                    %>
+                    <option value="<%= univ.getIdUtilisateur() %>"><%= univ.getNomUniversite() %></option>
+                    <%
+                        }
+                    } else {
+                    %>
+                    <option value="" disabled>Aucune université disponible</option>
+                    <% } %>
+                </select>
             </div>
 
             <div>
