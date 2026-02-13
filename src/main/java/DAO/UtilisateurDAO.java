@@ -6,7 +6,8 @@ public interface UtilisateurDAO {
 
     public void create(utilisateur u);
 
-    public static void update(utilisateur u) throws Exception {}
+    public static void update(utilisateur u) throws Exception {
+    }
 
     public java.util.List<utilisateur> findAllUsers() throws Exception;
 
@@ -17,5 +18,9 @@ public interface UtilisateurDAO {
     public void updateStatus(int id, String newStatus) throws Exception;
 
     public utilisateur login(String email, String password) throws Exception;
+
+    public int countAll() throws Exception;
+
+    public int countPendingEntities() throws Exception;
 
 }

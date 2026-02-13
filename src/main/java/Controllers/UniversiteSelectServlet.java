@@ -1,6 +1,7 @@
 package Controllers;
 
 import DAO.UniversiteDAO;
+import DAO.UniversiteDAOImpl;
 import Models.Universite;
 import Models.utilisateur;
 import jakarta.servlet.RequestDispatcher;
@@ -21,7 +22,7 @@ public class UniversiteSelectServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        this.universiteDAO = new UniversiteDAO();
+        this.universiteDAO = new UniversiteDAOImpl();
     }
 
     @Override

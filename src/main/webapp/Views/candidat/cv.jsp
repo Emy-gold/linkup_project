@@ -62,7 +62,7 @@
       </nav>
     </div>
     <div class="absolute bottom-0 w-64 p-6 border-t">
-      <a href="../../logout" class="flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors">
+      <a href="${pageContext.request.contextPath}/logout" class="flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors">
         <span class="material-icons">logout</span><span class="font-medium">Déconnexion</span>
       </a>
     </div>

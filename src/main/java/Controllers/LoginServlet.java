@@ -20,12 +20,16 @@ public class LoginServlet extends HttpServlet {
 
     private UtilisateurDAO userDAO = new UtilisateurDaoIMP();
 
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("login.jsp").forward(req, resp);
+    }
+
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         try {
-            utilisateur u = userDAO.login(req.getParameter("email"),req.getParameter("password"));
+            utilisateur u = userDAO.login(req.getParameter("email"), req.getParameter("password"));
 
-            if( u != null){
+            if (u != null) {
                 HttpSession session = req.getSession();
                 session.setAttribute("user", u);
                 session.setAttribute("userId", u.getIdUtilisateur());
@@ -42,7 +46,6 @@ public class LoginServlet extends HttpServlet {
                         int userId = u.getIdUtilisateur();
                         Recruteur recruteur = recruteurDAO.getByUserId(userId);
 
-
                         if (recruteur != null) {
 
                             // STOCKER EN SESSION (IMPORTANT)
@@ -57,18 +60,24 @@ public class LoginServlet extends HttpServlet {
 
                         break;
 
-
                     case "ADMIN":
-                        resp.sendRedirect("Views/admin/dashboard.jsp");
+                        resp.sendRedirect(req.getContextPath() + "/admin/dashboard?tab=dashboard");
                         break;
                     case "AGENT_UNIV":
-                        resp.sendRedirect("Views/universite/dashboard.jsp");
+                        DAO.UniversiteDAO univDAO = new DAO.UniversiteDAOImpl();
+                        Models.Universite univ = univDAO.getUniversiteByAgentId(u.getIdUtilisateur());
+                        if (univ != null) {
+                            session.setAttribute("universite", univ);
+                            resp.sendRedirect(req.getContextPath() + "/universite-dashboard");
+                        } else {
+                            resp.sendRedirect(req.getContextPath() + "/universite-complete-profile");
+                        }
                         break;
                     default:
                         resp.sendRedirect("/login.jsp?error=invalid_role");
                         break;
                 }
-            }else {
+            } else {
                 resp.sendRedirect("login.jsp?error=true");
             }
         } catch (Exception e) {

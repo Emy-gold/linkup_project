@@ -1,6 +1,7 @@
 package Controllers;
 
 import DAO.UniversiteDAO;
+import DAO.UniversiteDAOImpl;
 import Models.Universite;
 import com.google.gson.JsonObject;
 import jakarta.servlet.ServletException;
@@ -17,7 +18,7 @@ public class VerifyUniversityAccessServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        this.universiteDAO = new UniversiteDAO();
+        this.universiteDAO = new UniversiteDAOImpl();
     }
 
     @Override

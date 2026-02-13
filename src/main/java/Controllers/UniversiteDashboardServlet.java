@@ -2,6 +2,7 @@ package Controllers;
 
 import DAO.DiplomeDAOImpl;
 import DAO.UniversiteDAO;
+import DAO.UniversiteDAOImpl;
 import Models.Diplome;
 import Models.Universite;
 import Models.utilisateur;
@@ -24,7 +25,7 @@ public class UniversiteDashboardServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         this.diplomeDAO = new DiplomeDAOImpl();
-        this.universiteDAO = new UniversiteDAO();
+        this.universiteDAO = new UniversiteDAOImpl();
     }
 
     @Override
@@ -35,7 +36,7 @@ public class UniversiteDashboardServlet extends HttpServlet {
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
-        }
+        }   
 
         // Vérifier si c'est un agent universitaire
         utilisateur user = (utilisateur) session.getAttribute("user");
@@ -44,45 +45,25 @@ public class UniversiteDashboardServlet extends HttpServlet {
             return;
         }
 
-        String idUniversiteStr = request.getParameter("id_universite");
+        // Récupérer l'université depuis la session
+        Universite universite = (Universite) session.getAttribute("universite");
 
-        // DEBUG: Afficher le paramètre reçu
-        System.out.println("DEBUG: id_universite param = " + idUniversiteStr);
-
-        if (idUniversiteStr == null || idUniversiteStr.isEmpty()) {
-            // Rediriger vers la sélection si pas d'université spécifiée
-            response.sendRedirect(request.getContextPath() + "/universite-select");
-            return;
-        }
-
-        try {
-            int idUniversite = Integer.parseInt(idUniversiteStr);
-
-            // DEBUG
-            System.out.println("DEBUG: id_universite parsed = " + idUniversite);
-
-            // Récupérer les informations de l'université
-            Universite universite = universiteDAO.getUniversiteById(idUniversite);
-
-            // DEBUG
-            System.out.println("DEBUG: universite from DAO = " + universite);
-            if (universite != null) {
-                System.out.println("DEBUG: nomUniversite = " + universite.getNomUniversite());
-            }
-
+        if (universite == null) {
+            // Si pas en session, tenter de la récupérer via DAO
+            universite = universiteDAO.getUniversiteByAgentId(user.getIdUtilisateur());
             if (universite == null) {
-                request.setAttribute("error", "Université non trouvée");
-                response.sendRedirect(request.getContextPath() + "/universite-select");
+                response.sendRedirect(request.getContextPath() + "/universite-complete-profile");
                 return;
             }
+            session.setAttribute("universite", universite);
+        }
 
+        int idUniversite = universite.getIdUtilisateur();
+
+        try {
             // Récupérer les diplômes
             List<Diplome> diplomesEnAttente = diplomeDAO.getDiplomesEnAttente(idUniversite);
             List<Diplome> diplomesHistorique = diplomeDAO.getDiplomesHistorique(idUniversite);
-
-            // DEBUG
-            System.out.println("DEBUG: diplomesEnAttente size = " + (diplomesEnAttente != null ? diplomesEnAttente.size() : 0));
-            System.out.println("DEBUG: diplomesHistorique size = " + (diplomesHistorique != null ? diplomesHistorique.size() : 0));
 
             // Passer les données à la JSP
             request.setAttribute("universite", universite);
@@ -92,10 +73,10 @@ public class UniversiteDashboardServlet extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/Views/universite/dashboard.jsp");
             dispatcher.forward(request, response);
 
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("error", "ID université invalide");
-            response.sendRedirect(request.getContextPath() + "/universite-select");
+            request.setAttribute("error", "Erreur lors du chargement du tableau de bord");
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
     }
 

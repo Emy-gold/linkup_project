@@ -1,6 +1,7 @@
 package Controllers.candidat;
 
 import DAO.*;
+import Models.Universite;
 import Models.utilisateur;
 import Models.Candidat;
 import Models.Diplome;
@@ -23,7 +24,8 @@ public class ProfileServlet extends HttpServlet {
 
     private UtilisateurDAO utilisateurDAO = new UtilisateurDaoIMP();
     private CandidatDAO candidatDAO = new CandidatDAOImpl();
-    private DiplomeDAOImpl diplomeDAO = new DiplomeDAOImpl();
+    private diplomeDAO diplomeDAO = new DiplomeDAOImpl();
+    private UniversiteDAO universiteDAO = new UniversiteDAOImpl();
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
@@ -41,6 +43,10 @@ public class ProfileServlet extends HttpServlet {
         // Get diplomes
         List<Diplome> diplomes = diplomeDAO.getByCandidatId(user.getIdUtilisateur());
         req.setAttribute("diplomes", diplomes);
+
+        // Get universites pour la liste déroulante
+        List<Universite> universites = universiteDAO.getAllUniversites();
+        req.setAttribute("universites", universites);
 
         req.getRequestDispatcher("/Views/candidat/profile.jsp").forward(req, resp);
     }
@@ -83,6 +89,7 @@ public class ProfileServlet extends HttpServlet {
             } else if("addDiplome".equals(action)) {
                 // Add diplome
                 String libelle = req.getParameter("libelle");
+                String universiteIdStr = req.getParameter("id_universite"); // ✅ AJOUT : Récupérer l'ID de l'université
                 Part filePart = req.getPart("documentJustificatif");
 
                 String uploadPath = getServletContext().getRealPath("") + "uploads" + File.separator + "diplomes";
@@ -100,6 +107,11 @@ public class ProfileServlet extends HttpServlet {
                 diplome.setDocument_justificatif("uploads/diplomes/" + fileName);
                 diplome.setStatut_validation("En attente");
                 diplome.setId_candidat(user.getIdUtilisateur());
+
+                // ✅ AJOUT : Définir l'ID de l'université
+                if(universiteIdStr != null && !universiteIdStr.isEmpty()) {
+                    diplome.setId_universite(Integer.parseInt(universiteIdStr));
+                }
 
                 diplomeDAO.create(diplome);
                 resp.sendRedirect("profile?success=diplome");

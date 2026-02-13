@@ -9,7 +9,7 @@ public class UtilisateurDaoIMP implements UtilisateurDAO {
     public void create(utilisateur u) {
         String sql = "INSERT INTO utilisateur (email, password, nom, prenom, role, date_inscription, statut_compte) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = ConnexionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, u.getEmail());
             stmt.setString(2, u.getPassword());
@@ -59,7 +59,6 @@ public class UtilisateurDaoIMP implements UtilisateurDAO {
 
         ps.executeUpdate();
     }
-
 
     public utilisateur login(String email, String password) throws Exception {
 
@@ -167,5 +166,29 @@ public class UtilisateurDaoIMP implements UtilisateurDAO {
         ps.setString(1, newStatus);
         ps.setInt(2, id);
         ps.executeUpdate();
+    }
+
+    @Override
+    public int countAll() throws Exception {
+        String sql = "SELECT COUNT(*) FROM utilisateur";
+        Connection cn = ConnexionDB.getConnection();
+        PreparedStatement ps = cn.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+        return 0;
+    }
+
+    @Override
+    public int countPendingEntities() throws Exception {
+        String sql = "SELECT COUNT(*) FROM utilisateur WHERE statut_compte = 'EN_ATTENTE' AND role IN ('RECRUTEUR', 'AGENT_UNIV')";
+        Connection cn = ConnexionDB.getConnection();
+        PreparedStatement ps = cn.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+        return 0;
     }
 }
