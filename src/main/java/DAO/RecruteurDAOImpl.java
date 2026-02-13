@@ -42,7 +42,7 @@ public class RecruteurDAOImpl implements RecruteurDAO {
     // ================= UPDATE =================
     @Override
     public void update(Recruteur r) {
-        String sql = "UPDATE recruteur SET company_id=?, nom=?, prenom=?, telephone=?, poste=? WHERE id=?";
+        String sql = "UPDATE recruteur SET nom_entreprise=?, secteur_activite=?, description_entreprise=?, poste_occupe=?, logo=? WHERE user_id=?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
