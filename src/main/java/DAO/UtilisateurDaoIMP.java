@@ -6,36 +6,34 @@ import java.sql.*;
 
 public class UtilisateurDaoIMP implements UtilisateurDAO {
 
-    public void create(utilisateur u) {
-        String sql = "INSERT INTO utilisateur (email, password, nom, prenom, role, date_inscription, statut_compte) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = ConnexionDB.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+    public void create(utilisateur u) throws Exception {
+        String sql = "INSERT INTO utilisateur " +
+                "(email,password,nom,prenom,role,date_inscription,statut_compte) "
+                + "VALUES(?,?,?,?,?,?,?)";
+        Connection cn = ConnexionDB.getConnection();
+        // ⚠️ IMPORTANT: Ajouter Statement.RETURN_GENERATED_KEYS
+        PreparedStatement ps = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            stmt.setString(1, u.getEmail());
-            stmt.setString(2, u.getPassword());
-            stmt.setString(3, u.getNom());
-            stmt.setString(4, u.getPrenom());
-            stmt.setString(5, u.getRole());
-            stmt.setDate(6, new java.sql.Date(u.getDate().getTime()));
-            stmt.setString(7, u.getStatutCompte());
+        ps.setString(1, u.getEmail());
+        ps.setString(2, u.getPassword());
+        ps.setString(3, u.getNom());
+        ps.setString(4, u.getPrenom());
+        ps.setString(5, u.getRole());
+        ps.setDate(6, new java.sql.Date(u.getDate().getTime()));
+        ps.setString(7, u.getStatutCompte());
 
-            int rows = stmt.executeUpdate();
-            System.out.println("Utilisateur inserted: " + rows + " row(s)");
+        ps.executeUpdate();
 
-            // ⭐ RÉCUPÉRER L'ID GÉNÉRÉ
-            ResultSet generatedKeys = stmt.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                int generatedId = generatedKeys.getInt(1);
-                u.setIdUtilisateur(generatedId);
-                System.out.println("✅ ID généré: " + generatedId);
-            } else {
-                System.out.println("❌ Aucun ID généré!");
-            }
-
-        } catch (SQLException e) {
-            System.out.println("❌ Erreur création utilisateur: " + e.getMessage());
-            e.printStackTrace();
+        // ✅ RÉCUPÉRER L'ID GÉNÉRÉ
+        ResultSet generatedKeys = ps.getGeneratedKeys();
+        if (generatedKeys.next()) {
+            u.setIdUtilisateur(generatedKeys.getInt(1));
+            System.out.println("✅ ID utilisateur généré: " + u.getIdUtilisateur());
         }
+
+        generatedKeys.close();
+        ps.close();
+        cn.close();
     }
 
     public static void update(utilisateur u) throws Exception {

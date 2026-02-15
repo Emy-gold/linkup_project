@@ -4,7 +4,7 @@ import Models.utilisateur;
 
 public interface UtilisateurDAO {
 
-    public void create(utilisateur u);
+    public void create(utilisateur u) throws Exception;
 
     public static void update(utilisateur u) throws Exception {
     }
