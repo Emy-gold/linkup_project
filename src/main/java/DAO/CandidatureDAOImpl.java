@@ -11,19 +11,31 @@ public class CandidatureDAOImpl implements CandidatureDAO {
     // la methode create pour ajouter une candidature
     @Override
     public void create(Candidature c) {
-
-        String sql = "INSERT INTO candidature(id_candidat,id_annonce,date_soumission,statut_candidature,lettre_motivation) VALUES(?,?,?,?,?)";
-        try (Connection con = ConnexionDB.getConnection();
-                PreparedStatement ps = con.prepareStatement(sql);) {
+        String sql = "INSERT INTO candidature(id_candidat,id_annonce,date_soumission,statut_candidature,lettre_motivation,id_cv) VALUES(?,?,?,?,?,?)";
+        try(Connection con= ConnexionDB.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, c.getCandidatId());
             ps.setInt(2, c.getAnnonceId());
             ps.setDate(3, new java.sql.Date(c.getDateSoumission().getTime()));
             ps.setString(4, c.getStatutCandidature());
             ps.setString(5, c.getLettreMotivation());
+            ps.setInt(6, c.getCvId()); // AJOUT
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private Candidature extractFromResultSet(ResultSet rs) throws SQLException {
+        Candidature c = new Candidature();
+        c.setId(rs.getInt("id_candidature"));
+        c.setCandidatId(rs.getInt("id_candidat"));
+        c.setAnnonceId(rs.getInt("id_annonce"));
+        c.setDateSoumission(rs.getDate("date_soumission"));
+        c.setStatutCandidature(rs.getString("statut_candidature"));
+        c.setLettreMotivation(rs.getString("lettre_motivation"));
+        c.setCvId(rs.getInt("id_cv")); // AJOUT
+        return c;
     }
 
     @Override
@@ -186,17 +198,5 @@ public class CandidatureDAOImpl implements CandidatureDAO {
             e.printStackTrace();
         }
         return 0;
-    }
-
-    // recuperation des donnees
-    private Candidature extractFromResultSet(ResultSet rs) throws SQLException {
-        Candidature c = new Candidature();
-        c.setId(rs.getInt("id_candidature"));
-        c.setCandidatId(rs.getInt("id_candidat"));
-        c.setAnnonceId(rs.getInt("id_annonce"));
-        c.setDateSoumission(rs.getDate("date_soumission"));
-        c.setStatutCandidature(rs.getString("statut_candidature"));
-        c.setLettreMotivation(rs.getString("lettre_motivation"));
-        return c;
     }
 }

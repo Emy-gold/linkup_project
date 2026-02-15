@@ -72,11 +72,33 @@ public class CVDAOImpl implements CVDAO {
 
     @Override
     public void delete(int id) {
-        String sql = "DELETE FROM cv WHERE id_cv = ?";
-        try (Connection conn = ConnexionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
+        String sqlDeleteReferences = "UPDATE candidature SET id_cv = NULL WHERE id_cv = ?";
+        String sqlDeleteCV = "DELETE FROM cv WHERE id_cv = ?";
+
+        try (Connection conn = ConnexionDB.getConnection()) {
+            // Désactiver l'auto-commit pour faire une transaction
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement stmt1 = conn.prepareStatement(sqlDeleteReferences);
+                 PreparedStatement stmt2 = conn.prepareStatement(sqlDeleteCV)) {
+                // 1. Mettre à NULL les références dans candidature
+                stmt1.setInt(1, id);
+                stmt1.executeUpdate();
+                // 2. Supprimer le CV
+                stmt2.setInt(1, id);
+                int rowsDeleted = stmt2.executeUpdate();
+                // Commit la transaction
+                conn.commit();
+                if(rowsDeleted == 0) {
+                    System.out.println("CV not deleted - 0 rows affected");
+                }
+            } catch (SQLException e) {
+                // En cas d'erreur, rollback
+                conn.rollback();
+                throw e;
+            } finally {
+                conn.setAutoCommit(true);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -68,6 +68,7 @@ public class PostulerServlet extends HttpServlet {
             Candidature c = new Candidature();
             c.setCandidatId(candidatId);
             c.setAnnonceId(annonceId);
+            c.setCvId(cvId); // ← AJOUT ICI
             c.setDateSoumission(new Date());
             c.setStatutCandidature("En attente");
             c.setLettreMotivation(lettreMotivation);

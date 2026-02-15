@@ -2,7 +2,10 @@ package Controllers.candidat;
 
 import DAO.CandidatureDAO;
 import DAO.CandidatureDAOImpl;
+import DAO.CVDAO;
+import DAO.CVDAOImpl;
 import Models.Candidature;
+import Models.Cv;
 import Models.utilisateur;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -12,12 +15,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/candidat/candidatures")
 public class CandidaturesServlet extends HttpServlet {
 
     private CandidatureDAO candidatureDAO = new CandidatureDAOImpl();
+    private CVDAO cvDAO = new CVDAOImpl(); // AJOUT
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
@@ -29,8 +35,6 @@ public class CandidaturesServlet extends HttpServlet {
         }
 
         int candidatId = user.getIdUtilisateur();
-
-        // Get filter parameter
         String statut = req.getParameter("statut");
 
         List<Candidature> candidatures;
@@ -41,11 +45,21 @@ public class CandidaturesServlet extends HttpServlet {
             candidatures = candidatureDAO.getByCandidatId(candidatId);
         }
 
-        // Set attributes
+        // AJOUT: Créer une map pour associer chaque candidature à son CV
+        Map<Integer, Cv> cvMap = new HashMap<>();
+        for(Candidature c : candidatures) {
+            if(c.getCvId() > 0) {
+                Cv cv = cvDAO.getById(c.getCvId());
+                if(cv != null) {
+                    cvMap.put(c.getId(), cv);
+                }
+            }
+        }
+
         req.setAttribute("candidatures", candidatures);
+        req.setAttribute("cvMap", cvMap); // AJOUT
         req.setAttribute("statut", statut);
 
-        // Forward to JSP
         req.getRequestDispatcher("/Views/candidat/candidatures.jsp").forward(req, resp);
     }
 }

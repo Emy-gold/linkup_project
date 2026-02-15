@@ -1,7 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="Models.utilisateur" %>
 <%@ page import="Models.Candidature" %>
+<%@ page import="Models.Cv" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%
     utilisateur user = (utilisateur) session.getAttribute("user");
@@ -11,6 +13,7 @@
     }
 
     List<Candidature> candidatures = (List<Candidature>) request.getAttribute("candidatures");
+    Map<Integer, Cv> cvMap = (Map<Integer, Cv>) request.getAttribute("cvMap");
     String currentStatut = (String) request.getAttribute("statut");
 %>
 <!DOCTYPE html>
@@ -147,6 +150,9 @@
                                     statutClass = "bg-blue-100 text-blue-700";
                                     statutIcon = "info";
                             }
+
+                            // Récupérer le CV associé
+                            Cv cv = cvMap != null ? cvMap.get(c.getId()) : null;
                 %>
                 <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
                     <div class="flex items-start justify-between">
@@ -161,11 +167,24 @@
                                 <p class="text-sm text-gray-600 mb-3">
                                     Candidature soumise le <%= sdf.format(c.getDateSoumission()) %>
                                 </p>
-                                <div class="flex items-center gap-4 mb-3">
-                                        <span class="flex items-center gap-1 text-sm text-gray-600">
-                                            <span class="material-icons text-sm">description</span>
-                                            ID: <%= c.getId() %>
-                                        </span>
+                                <div class="flex items-center gap-4 mb-3 flex-wrap">
+                                    <span class="flex items-center gap-1 text-sm text-gray-600">
+                                        <span class="material-icons text-sm">description</span>
+                                        ID: <%= c.getId() %>
+                                    </span>
+
+                                    <!-- Affichage du CV -->
+                                    <% if(cv != null) { %>
+                                    <span class="flex items-center gap-1 text-sm text-green-600 bg-green-50 px-3 py-1 rounded-full">
+                                        <span class="material-icons text-sm">picture_as_pdf</span>
+                                        CV: <%= cv.getTitre() %>
+                                    </span>
+                                    <% } else { %>
+                                    <span class="flex items-center gap-1 text-sm text-red-600 bg-red-50 px-3 py-1 rounded-full">
+                                        <span class="material-icons text-sm">warning</span>
+                                        Aucun CV attaché
+                                    </span>
+                                    <% } %>
                                 </div>
                                 <details class="text-sm text-gray-700">
                                     <summary class="cursor-pointer text-primary hover:underline font-medium">
@@ -178,13 +197,18 @@
                             </div>
                         </div>
                         <div class="flex flex-col items-end gap-3">
-                                <span class="px-4 py-2 <%= statutClass %> rounded-full text-sm font-medium flex items-center gap-2">
-                                    <span class="material-icons text-sm"><%= statutIcon %></span>
-                                    <%= c.getStatutCandidature() %>
-                                </span>
-                            <button class="text-primary hover:text-primary-dark transition-colors">
-                                <span class="material-icons">visibility</span>
-                            </button>
+                            <span class="px-4 py-2 <%= statutClass %> rounded-full text-sm font-medium flex items-center gap-2">
+                                <span class="material-icons text-sm"><%= statutIcon %></span>
+                                <%= c.getStatutCandidature() %>
+                            </span>
+
+                            <% if(cv != null) { %>
+                            <a href="<%= request.getContextPath() + "/" + cv.getCheminFichier() %>" target="_blank"
+                               class="text-blue-600 hover:text-blue-700 transition-colors flex items-center gap-1 text-sm">
+                                <span class="material-icons text-sm">visibility</span>
+                                <span>Voir CV</span>
+                            </a>
+                            <% } %>
                         </div>
                     </div>
                 </div>
