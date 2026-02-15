@@ -28,6 +28,7 @@ public class CompleteProfileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        System.out.println(">>> DEBUG : La methode doGet est bien appelée !"); // AJOUTEZ CECI
         request.getRequestDispatcher("/Views/recruteur/complete-profile.jsp").forward(request, response);
     }
 
@@ -47,7 +48,7 @@ public class CompleteProfileServlet extends HttpServlet {
 
         String nomEntreprise = request.getParameter("nomEntreprise");
         String secteur = request.getParameter("secteurActivite");
-        String description = request.getParameter("descriptionEntreprise");
+        String descriptionEntreprise = request.getParameter("descriptionEntreprise");
         String poste = request.getParameter("posteOccupe");
 
         try {
@@ -55,7 +56,7 @@ public class CompleteProfileServlet extends HttpServlet {
             r.setUserId(userId);
             r.setNomEntreprise(nomEntreprise);
             r.setSecteurActivite(secteur);
-            r.setDescriptionEntreprise(description);
+            r.setDescriptionEntreprise(descriptionEntreprise);
             r.setPosteOccupe(poste);
             r.setLogo(null);
 
