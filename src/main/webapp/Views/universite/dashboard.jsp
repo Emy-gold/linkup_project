@@ -19,7 +19,7 @@
                                     return;
                                     }
                                     if (universite == null) {
-                                    response.sendRedirect(request.getContextPath() + "/universite-select");
+                                    response.sendRedirect(request.getContextPath() + "/universite-complete-profile");
                                     return;
                                     }
 
@@ -219,6 +219,20 @@
                                                 font-size: 1rem;
                                                 border: 2px solid var(--white);
                                                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                                            }
+
+                                            .user-profile-link {
+                                                text-decoration: none;
+                                                color: inherit;
+                                                display: flex;
+                                                align-items: center;
+                                                padding: 5px 10px;
+                                                border-radius: 8px;
+                                                transition: background-color 0.2s;
+                                            }
+
+                                            .user-profile-link:hover {
+                                                background-color: var(--accent-color);
                                             }
 
                                             /* Page Content */
@@ -515,18 +529,6 @@
                                                 <img src="<%= request.getContextPath() %>/assets/logo.png" alt="LinkUp">
                                             </div>
                                             <nav>
-                                                <a href="<%= request.getContextPath() %>/universite-select"
-                                                    class="nav-link">
-                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                        stroke-linejoin="round">
-                                                        <rect x="3" y="3" width="7" height="7"></rect>
-                                                        <rect x="14" y="3" width="7" height="7"></rect>
-                                                        <rect x="14" y="14" width="7" height="7"></rect>
-                                                        <rect x="3" y="14" width="7" height="7"></rect>
-                                                    </svg>
-                                                    Mes Universités
-                                                </a>
                                                 <a href="#" class="nav-link active">
                                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                                                         stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -565,18 +567,21 @@
                                                     <%= universite.getNomUniversite() %> (ID: <%=
                                                             universite.getIdUtilisateur() %>)
                                                 </div>
-                                                <div class="user-profile">
-                                                    <div class="user-info">
-                                                        <span class="user-name">
-                                                            <%= user.getPrenom() %>
-                                                                <%= user.getNom() %>
-                                                        </span>
-                                                        <span class="user-role">Administrateur Universitaire</span>
+                                                <a href="<%= request.getContextPath() %>/agent-profile"
+                                                    class="user-profile-link">
+                                                    <div class="user-profile">
+                                                        <div class="user-info">
+                                                            <span class="user-name">
+                                                                <%= user.getPrenom() %>
+                                                                    <%= user.getNom() %>
+                                                            </span>
+                                                            <span class="user-role">Administrateur Universitaire</span>
+                                                        </div>
+                                                        <div class="avatar">
+                                                            <%= user.getInitiales() %>
+                                                        </div>
                                                     </div>
-                                                    <div class="avatar">
-                                                        <%= user.getInitiales() %>
-                                                    </div>
-                                                </div>
+                                                </a>
                                             </header>
 
                                             <!-- Main Fluid Content -->

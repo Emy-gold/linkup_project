@@ -1,4 +1,4 @@
-package Controllers;
+package Controllers.universite;
 
 import DAO.DiplomeDAOImpl;
 import DAO.UniversiteDAO;
@@ -45,11 +45,29 @@ public class UniversiteDashboardServlet extends HttpServlet {
             return;
         }
 
-        // Récupérer l'université depuis la session
-        Universite universite = (Universite) session.getAttribute("universite");
+        // Récupérer l'ID de l'université depuis le paramètre (si présent)
+        String idParam = request.getParameter("id_universite");
+        Universite universite = null;
+
+        if (idParam != null) {
+            try {
+                int id = Integer.parseInt(idParam);
+                universite = universiteDAO.getUniversiteById(id);
+                // Vérifier que cet agent a bien le droit d'accéder à cette université
+                // (Optionnel selon vos règles métier, ici on suppose que s'il peut la voir il peut la gérer)
+                session.setAttribute("universite", universite);
+            } catch (NumberFormatException e) {
+                // ID invalide, on continue avec la session
+            }
+        }
 
         if (universite == null) {
-            // Si pas en session, tenter de la récupérer via DAO
+            // Récupérer l'université depuis la session
+            universite = (Universite) session.getAttribute("universite");
+        }
+
+        if (universite == null) {
+            // Si toujours pas trouvé, tenter de la récupérer via DAO (par défaut la première de l'agent)
             universite = universiteDAO.getUniversiteByAgentId(user.getIdUtilisateur());
             if (universite == null) {
                 response.sendRedirect(request.getContextPath() + "/universite-complete-profile");
