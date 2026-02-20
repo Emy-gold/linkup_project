@@ -30,6 +30,13 @@ public class LoginServlet extends HttpServlet {
             utilisateur u = userDAO.login(req.getParameter("email"), req.getParameter("password"));
 
             if (u != null) {
+                // Check if account is suspended
+                if ("SUSPENDU".equals(u.getStatutCompte())) {
+                    req.setAttribute("error", "Votre compte a été suspendu par l'administrateur.");
+                    req.getRequestDispatcher("login.jsp").forward(req, resp);
+                    return;
+                }
+
                 HttpSession session = req.getSession();
                 session.setAttribute("user", u);
                 session.setAttribute("userId", u.getIdUtilisateur());
@@ -61,7 +68,7 @@ public class LoginServlet extends HttpServlet {
                         break;
 
                     case "ADMIN":
-                        resp.sendRedirect(req.getContextPath() + "/admin/dashboard?tab=dashboard");
+                        resp.sendRedirect(req.getContextPath() + "/admin/dashboard");
                         break;
                     case "AGENT_UNIV":
                         DAO.UniversiteDAO univDAO = new DAO.UniversiteDAOImpl();

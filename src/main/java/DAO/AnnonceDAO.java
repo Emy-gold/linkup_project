@@ -29,4 +29,10 @@ public interface AnnonceDAO {
     int countByRecruteurId(int recruteurId);
 
     java.util.List<java.util.Map<String, Object>> findAllWithCompany() throws Exception;
+
+    void toggleBlockStatus(int idAnnonce, boolean block) throws Exception;
+
+    void blockAllAdsByRecruteur(int recruteurId) throws Exception;
+
+    int countTotal() throws Exception;
 }

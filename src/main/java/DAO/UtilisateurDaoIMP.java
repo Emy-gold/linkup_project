@@ -20,7 +20,12 @@ public class UtilisateurDaoIMP implements UtilisateurDAO {
         ps.setString(4, u.getPrenom());
         ps.setString(5, u.getRole());
         ps.setDate(6, new java.sql.Date(u.getDate().getTime()));
-        ps.setString(7, u.getStatutCompte());
+
+        String status = u.getStatutCompte();
+        if (status == null || status.isEmpty()) {
+            status = "ACTIF";
+        }
+        ps.setString(7, status);
 
         ps.executeUpdate();
 
@@ -186,6 +191,90 @@ public class UtilisateurDaoIMP implements UtilisateurDAO {
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
             return rs.getInt(1);
+        }
+        return 0;
+    }
+
+    @Override
+    public utilisateur findById(int id) throws Exception {
+        String sql = "SELECT * FROM utilisateur WHERE id_utilisateur=?";
+        Connection cn = ConnexionDB.getConnection();
+        PreparedStatement ps = cn.prepareStatement(sql);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            utilisateur u = new utilisateur();
+            u.setIdUtilisateur(rs.getInt("id_utilisateur"));
+            u.setEmail(rs.getString("email"));
+            u.setNom(rs.getString("nom"));
+            u.setPrenom(rs.getString("prenom"));
+            u.setRole(rs.getString("role"));
+            u.setStatutCompte(rs.getString("statut_compte"));
+            u.setDate(rs.getDate("date_inscription"));
+            return u;
+        }
+        return null;
+    }
+
+    @Override
+    public java.util.List<Models.utilisateur> findAllEntitiesDetails() throws Exception {
+        java.util.List<Models.utilisateur> entities = new java.util.ArrayList<>();
+        String sql = "SELECT u.id_utilisateur, u.nom, u.prenom, u.email, u.role, u.statut_compte, u.date_inscription, "
+                +
+                "r.nom_entreprise AS nom_entite, r.secteur_activite, r.poste_occupe, NULL AS adresse, NULL AS telephone "
+                +
+                "FROM utilisateur u JOIN recruteur r ON u.id_utilisateur = r.id_recruteur " +
+                "UNION " +
+                "SELECT u.id_utilisateur, u.nom, u.prenom, u.email, u.role, u.statut_compte, u.date_inscription, " +
+                "univ.nom_universite AS nom_entite, NULL AS secteur_activite, NULL AS poste_occupe, univ.adresse, univ.telephone "
+                +
+                "FROM utilisateur u JOIN universite univ ON u.id_utilisateur = univ.id_universite";
+
+        try (Connection cn = ConnexionDB.getConnection();
+                PreparedStatement ps = cn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Models.utilisateur u = new Models.utilisateur();
+                u.setIdUtilisateur(rs.getInt("id_utilisateur"));
+                u.setEmail(rs.getString("email"));
+                u.setNom(rs.getString("nom"));
+                u.setPrenom(rs.getString("prenom"));
+                u.setRole(rs.getString("role"));
+                u.setStatutCompte(rs.getString("statut_compte"));
+                u.setDate(rs.getDate("date_inscription"));
+                u.setNomEntite(rs.getString("nom_entite"));
+                u.setSecteurActivite(rs.getString("secteur_activite"));
+                u.setAdresse(rs.getString("adresse"));
+                u.setTelephone(rs.getString("telephone"));
+                entities.add(u);
+            }
+        }
+        return entities;
+    }
+
+    @Override
+    public int getTotalCompanies() throws Exception {
+        String sql = "SELECT COUNT(*) FROM recruteur";
+        try (Connection cn = ConnexionDB.getConnection();
+                PreparedStatement ps = cn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public int getTotalUniversities() throws Exception {
+        String sql = "SELECT COUNT(*) FROM universite";
+        try (Connection cn = ConnexionDB.getConnection();
+                PreparedStatement ps = cn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
         }
         return 0;
     }

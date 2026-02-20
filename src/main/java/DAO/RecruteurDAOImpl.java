@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class RecruteurDAOImpl implements RecruteurDAO {
 
     private Connection conn;
@@ -20,22 +19,27 @@ public class RecruteurDAOImpl implements RecruteurDAO {
 
     // ================= CREATE =================
     @Override
-    public void create(Recruteur r) {
-        String sql = "INSERT INTO recruteur (user_id, nom_entreprise, secteur_activite, description_entreprise, logo, poste_occupe) VALUES (?, ?, ?, ?, ?, ?)";
+    public void create(Recruteur r) throws SQLException {
+        // Schema: id_recruteur (PK, FK), nom_entreprise, secteur_activite,
+        // description_entreprise, logo, poste_occupe
+        String sql = "INSERT INTO recruteur (id_recruteur, nom_entreprise, secteur_activite, description_entreprise, logo, poste_occupe) VALUES (?, ?, ?, ?, ?, ?)";
+        System.out.println(">>> DEBUG : RecruteurDAOImpl - Tentative d'insertion pour id_recruteur=" + r.getUserId());
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, r.getUserId());
+            stmt.setInt(1, r.getUserId()); // id_recruteur is the FK to utilisateur.id_utilisateur
             stmt.setString(2, r.getNomEntreprise());
             stmt.setString(3, r.getSecteurActivite());
             stmt.setString(4, r.getDescriptionEntreprise());
             stmt.setString(5, r.getLogo());
             stmt.setString(6, r.getPosteOccupe());
 
-            stmt.executeUpdate();
+            int rows = stmt.executeUpdate();
+            System.out.println(">>> DEBUG : RecruteurDAOImpl - Insertion réussie, lignes impactées : " + rows);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println(">>> ERROR : RecruteurDAOImpl - Erreur SQL lors de la création : " + e.getMessage());
+            throw e;
         }
     }
 
@@ -82,8 +86,8 @@ public class RecruteurDAOImpl implements RecruteurDAO {
         String sql = "SELECT * FROM recruteur";
 
         try (Connection conn = ConnexionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 // Appel de la méthode helper pour remplir l'objet
@@ -101,7 +105,7 @@ public class RecruteurDAOImpl implements RecruteurDAO {
         Recruteur r = new Recruteur();
 
         r.setRecruteurId(rs.getInt("id_recruteur"));
-        r.setUserId(rs.getInt("user_id"));
+        r.setUserId(rs.getInt("id_recruteur")); // In this schema, id_recruteur IS the user_id FK
         r.setNomEntreprise(rs.getString("nom_entreprise"));
         r.setSecteurActivite(rs.getString("secteur_activite"));
         r.setDescriptionEntreprise(rs.getString("description_entreprise"));
@@ -118,7 +122,7 @@ public class RecruteurDAOImpl implements RecruteurDAO {
         String sql = "SELECT * FROM recruteur WHERE id_recruteur = ?";
 
         try (Connection conn = ConnexionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
 
@@ -141,7 +145,7 @@ public class RecruteurDAOImpl implements RecruteurDAO {
     @Override
     public Recruteur getByUserId(int userId) {
 
-        String sql = "SELECT * FROM recruteur WHERE user_id=?";
+        String sql = "SELECT * FROM recruteur WHERE id_recruteur=?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -150,17 +154,7 @@ public class RecruteurDAOImpl implements RecruteurDAO {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                Recruteur r = new Recruteur();
-
-                r.setRecruteurId(rs.getInt("id_recruteur"));
-                r.setUserId(rs.getInt("user_id"));
-                r.setNomEntreprise(rs.getString("nom_entreprise"));
-                r.setSecteurActivite(rs.getString("secteur_activite"));
-                r.setDescriptionEntreprise(rs.getString("description_entreprise"));
-                r.setLogo(rs.getString("logo"));
-                r.setPosteOccupe(rs.getString("poste_occupe"));
-
-                return r;
+                return extractFromResultSet(rs);
             }
 
         } catch (SQLException e) {
@@ -170,13 +164,11 @@ public class RecruteurDAOImpl implements RecruteurDAO {
         return null;
     }
 
-
     // ================= EXISTS BY USER ID =================
     @Override
     public boolean existsByUserId(int userId) {
 
-        //compter les nombre des lignes qui est en relation avec user_id
-        String sql = "SELECT COUNT(*) FROM recruteur WHERE user_id=?";
+        String sql = "SELECT COUNT(*) FROM recruteur WHERE id_recruteur=?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 

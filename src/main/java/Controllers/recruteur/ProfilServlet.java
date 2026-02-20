@@ -1,4 +1,5 @@
 package Controllers.recruteur;
+
 import DAO.RecruteurDAO;
 import DAO.RecruteurDAOImpl;
 import DAO.UtilisateurDAO;
@@ -16,8 +17,7 @@ import java.util.List;
 import Models.Recruteur;
 
 @WebServlet("/recruteur/profil")
-public class ProfilServlet extends HttpServlet{
-
+public class ProfilServlet extends HttpServlet {
 
     private RecruteurDAO recruteurDAO;
 
@@ -50,7 +50,6 @@ public class ProfilServlet extends HttpServlet{
                 .forward(request, response);
     }
 
-
     // =========================
     // POST → actions
     // =========================
@@ -60,20 +59,22 @@ public class ProfilServlet extends HttpServlet{
 
         String action = request.getParameter("actionRecruteur");
 
-        if ("modifyRecruteur".equals(action)) {
-            updateRecruteur(request);
+        try {
+            if ("modifyRecruteur".equals(action)) {
+                updateRecruteur(request);
+            }
+            response.sendRedirect(request.getContextPath() + "/recruteur/profil?success=updated");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/recruteur/profil?error=true");
         }
-
-        response.sendRedirect(request.getContextPath() + "/recruteur/profil?success=updated");
     }
-
 
     // =========================
     // METHODS
     // =========================
 
-
-    private void updateRecruteur(HttpServletRequest request) {
+    private void updateRecruteur(HttpServletRequest request) throws Exception {
 
         int userId = (Integer) request.getSession().getAttribute("userId");
 
@@ -86,6 +87,5 @@ public class ProfilServlet extends HttpServlet{
 
         recruteurDAO.update(r);
     }
-
 
 }

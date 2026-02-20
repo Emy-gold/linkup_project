@@ -192,4 +192,39 @@ public class AnnonceDAOImpl implements AnnonceDAO {
         a.setDatePublication(rs.getDate("date_publication"));
         return a;
     }
+
+    @Override
+    public void toggleBlockStatus(int idAnnonce, boolean block) throws Exception {
+        String status = block ? "BLOQUÉE" : "PUBLIÉE";
+        String sql = "UPDATE annonce SET statut_annonce = ? WHERE id_annonce = ?";
+        try (Connection conn = ConnexionDB.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, status);
+            stmt.setInt(2, idAnnonce);
+            stmt.executeUpdate();
+        }
+    }
+
+    @Override
+    public void blockAllAdsByRecruteur(int recruteurId) throws Exception {
+        String sql = "UPDATE annonce SET statut_annonce = 'BLOQUÉE' WHERE id_recruteur = ?";
+        try (Connection conn = ConnexionDB.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, recruteurId);
+            stmt.executeUpdate();
+        }
+    }
+
+    @Override
+    public int countTotal() throws Exception {
+        String sql = "SELECT COUNT(*) FROM annonce";
+        try (Connection conn = ConnexionDB.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
 }

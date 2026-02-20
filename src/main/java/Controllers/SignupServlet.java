@@ -34,14 +34,14 @@ public class SignupServlet extends HttpServlet {
                     req.getParameter("prenom"),
                     role,
                     new Date(),
-                    "Actif");
+                    "ACTIF");
 
             utilisateurDAO.create(u);
 
             System.out.println("✅ Utilisateur créé avec ID: " + u.getIdUtilisateur());
 
             // 2. Insert into candidat table if role is CANDIDAT
-            if("CANDIDAT".equals(role)) {
+            if ("CANDIDAT".equals(role)) {
                 Candidat c = new Candidat();
                 c.setIdUtilisateur(u.getIdUtilisateur());
                 c.setTitreProfil(null);
