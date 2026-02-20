@@ -131,11 +131,11 @@
                 <!-- ================================= -->
                 <!-- Forms Column -->
                 <!-- ================================= -->
-                <div class="lg:col-span-2 space-y-8">
+                <div class="lg:col-span-2 space-y-4">
                     <!-- ===== Card Style Reusable ===== -->
                     <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
 
-                        <form method="POST" action="${pageContext.request.contextPath}/recruteur/profil" class="space-y-8">
+                        <form method="POST" action="${pageContext.request.contextPath}/recruteur/profil" class="space-y-4">
 
                             <input type="hidden" name="actionRecruteur" value="modifyRecruteur">
 
@@ -144,7 +144,7 @@
 
                             <!-- Professional Info Section -->
                             <c:if test="${not empty recruteur}">
-                                <div class="border-t border-gray-200 pt-8">
+                                <div class=" border-gray-200 pt-4">
                                     <h3 class="text-xl font-bold mb-6 flex items-center gap-3 text-gray-900">
                                         <i class="fas fa-briefcase text-blue-600"></i>
                                         Informations Professionnelles

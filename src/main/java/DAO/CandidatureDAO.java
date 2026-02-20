@@ -16,9 +16,17 @@ public interface CandidatureDAO {
 
     public void delete(int id);
 
+    List<Candidature> getByRecruteurId(int userId);
+
+    void updateStatut(int idCandidature, String statut);
+
     List<Candidature> getByCandidatId(int candidatId);
 
+    List<Candidature> getByRecruteurIdAndStatut(int recruteurId, String statut);
+
     List<Candidature> getByAnnonceId(int annonceId);
+
+
 
     List<Candidature> getByCandidatureIdAndStatut(int candidatId, String statut);
 

@@ -143,4 +143,66 @@ public class EntretienDAOImpl implements EntretienDAO {
         e.setNotesRecruteur(rs.getString("notes_recruteur"));
         return e;
     }
+
+
+
+    @Override
+    public void createEntretien(int candidatureId) throws Exception {
+
+
+        String sql = "INSERT INTO entretien " +
+                "(id_candidature, date_heure, lieu, statut_entretien, notes_recruteur) " +
+                "VALUES (?, NOW(), 'À définir', 'Planifie', NULL)";
+
+        try (Connection con = ConnexionDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+             ps.setInt(1, candidatureId);
+             ps.executeUpdate();
+        }
+    }
+
+
+
+    @Override
+    public List<Entretien> getByRecruteurId(int recruteurId) throws Exception {
+
+        List<Entretien> list = new ArrayList<>();
+
+        String sql = "SELECT e.*, u.nom, u.prenom, a.titre " +
+                "FROM entretien e " +
+                "JOIN candidature c ON e.id_candidature = c.id_candidature " +
+                "JOIN annonce a ON c.id_annonce = a.id_annonce " +
+                "JOIN recruteur r ON a.id_recruteur = r.id_recruteur " +
+                "JOIN utilisateur u ON c.id_candidat = u.id_utilisateur " +
+                "WHERE r.id_recruteur = ? " +
+                "ORDER BY e.date_heure DESC";
+
+        try (Connection con = ConnexionDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, recruteurId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Entretien e = new Entretien();
+
+                e.setId(rs.getInt("id_entretien"));
+                e.setCandidatureId(rs.getInt("id_candidature"));
+                e.setDateHeure(rs.getTimestamp("date_heure"));
+                e.setLieu(rs.getString("lieu"));
+                e.setStatutEntretien(rs.getString("statut_entretien"));
+                e.setNotesRecruteur(rs.getString("notes_recruteur"));
+
+                // infos candidat
+                e.setNom(rs.getString("nom"));
+                e.setPrenom(rs.getString("prenom"));
+                e.setTitreAnnonce(rs.getString("titre"));
+
+                list.add(e);
+            }
+        }
+
+        return list;
+    }
 }

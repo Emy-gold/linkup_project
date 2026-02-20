@@ -64,11 +64,11 @@
             <span>Candidatures reçues</span>
         </a>
 
-        <!-- Mes Candidats -->
-        <a href="${pageContext.request.contextPath}/recruteur/candidats"
+        <!-- Mes Entretients -->
+        <a href="${pageContext.request.contextPath}/recruteur/entretiens"
            class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:bg-slate-100 transition-colors font-medium ${currentPage == 'candidats' ? 'bg-primary text-white hover:bg-primary-dark' : ''}">
-            <i class="fas fa-users w-5"></i>
-            <span>Mes Candidats</span>
+            <i class="fas fa-comments w-5"></i>
+            <span>Mes Entretients</span>
         </a>
 
         <!-- Mon Profil -->
@@ -81,7 +81,7 @@
 
     <!-- Logout -->
     <div class="p-4 border-t border-slate-200">
-        <a href="${pageContext.request.contextPath}/Logout"
+        <a href="${pageContext.request.contextPath}/logout"
            class="flex items-center space-x-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors font-medium">
             <i class="fas fa-sign-out-alt w-5"></i>
             <span>Déconnexion</span>

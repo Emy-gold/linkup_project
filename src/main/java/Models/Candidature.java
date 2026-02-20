@@ -12,6 +12,13 @@ public class Candidature {
     private int annonceId;
     private int cvId; // AJOUT
 
+
+    // NOUVEAUX CHAMPS POUR L'AFFICHAGE
+    private String nom;
+    private String prenom;
+    private String posteOccupe;
+    private String cheminCv;
+
     public Candidature(){}
 
     public Candidature(int id, Date dateSoumission, String statutCandidature, String lettreMotivation, int candidatId, int annonceId, int cvId) {
@@ -32,6 +39,12 @@ public class Candidature {
     public int getCandidatId() { return candidatId; }
     public int getAnnonceId() { return annonceId; }
 
+    public String getNom() { return nom; }
+    public String getPrenom() { return prenom; }
+    public String getPosteOccupe() { return posteOccupe; }
+    public String getCheminCv() { return cheminCv; }
+
+
     // AJOUT
     public int getCvId() { return cvId; }
 
@@ -42,6 +55,11 @@ public class Candidature {
     public void setStatutCandidature(String statutCandidature) { this.statutCandidature = statutCandidature; }
     public void setCandidatId(int candidatId) { this.candidatId = candidatId; }
     public void setAnnonceId(int annonceId) { this.annonceId = annonceId; }
+
+    public void setNom(String nom) { this.nom = nom; }
+    public void setPrenom(String prenom) { this.prenom = prenom; }
+    public void setPosteOccupe(String posteOccupe) { this.posteOccupe = posteOccupe; }
+    public void setCheminCv(String cheminCv) { this.cheminCv = cheminCv; }
 
     // AJOUT
     public void setCvId(int cvId) { this.cvId = cvId; }

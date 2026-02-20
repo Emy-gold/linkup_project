@@ -199,4 +199,126 @@ public class CandidatureDAOImpl implements CandidatureDAO {
         }
         return 0;
     }
+
+
+    //Get Candidatures By Recruteur Id
+    @Override
+    public List<Candidature> getByRecruteurId(int userId) {
+
+        List<Candidature> list = new ArrayList<>();
+
+        String sql = "SELECT c.*, u.nom, u.prenom, r.poste_occupe, cv.chemin_fichier " +
+                "FROM candidature c " +
+                "JOIN annonce a ON c.id_annonce = a.id_annonce " +
+                "JOIN recruteur r ON a.id_recruteur = r.id_recruteur " +
+                "JOIN utilisateur u ON c.id_candidat = u.id_utilisateur " +
+                "LEFT JOIN cv ON c.id_cv = cv.id_cv " +
+                "WHERE r.id_recruteur = ? " +
+                "ORDER BY c.date_soumission DESC";
+
+
+        try (Connection con = ConnexionDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Candidature c = new Candidature();
+
+                c.setId(rs.getInt("id_candidature"));
+                c.setCandidatId(rs.getInt("id_candidat"));
+                c.setAnnonceId(rs.getInt("id_annonce"));
+                c.setDateSoumission(rs.getDate("date_soumission"));
+                c.setStatutCandidature(rs.getString("statut_candidature"));
+                c.setCvId(rs.getInt("id_cv"));
+
+                // 🔥 champs supplémentaires
+                c.setNom(rs.getString("nom"));
+                c.setPrenom(rs.getString("prenom"));
+                c.setPosteOccupe(rs.getString("poste_occupe"));
+                c.setCheminCv(rs.getString("chemin_fichier"));
+
+                list.add(c);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+
+
+    @Override
+    public void updateStatut(int idCandidature, String statut) {
+
+        String sql = "UPDATE candidature SET statut_candidature=? WHERE id_candidature=?";
+
+        try (Connection con = ConnexionDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, statut);
+            ps.setInt(2, idCandidature);
+
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    @Override
+    public List<Candidature> getByRecruteurIdAndStatut(int recruteurId, String statut) {
+
+        List<Candidature> list = new ArrayList<>();
+
+        String sql = "SELECT c.*, u.nom, u.prenom, r.poste_occupe, cv.chemin_fichier " +
+                "FROM candidature c " +
+                "JOIN annonce a ON c.id_annonce = a.id_annonce " +
+                "JOIN recruteur r ON a.id_recruteur = r.id_recruteur " +
+                "JOIN utilisateur u ON c.id_candidat = u.id_utilisateur " +
+                "LEFT JOIN cv ON c.id_cv = cv.id_cv " +
+                "WHERE r.id_recruteur = ? AND c.statut_candidature = ? " +
+                "ORDER BY c.date_soumission DESC";
+
+        try (Connection con = ConnexionDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, recruteurId);
+            ps.setString(2, statut);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Candidature c = new Candidature();
+
+                c.setId(rs.getInt("id_candidature"));
+                c.setCandidatId(rs.getInt("id_candidat"));
+                c.setAnnonceId(rs.getInt("id_annonce"));
+                c.setDateSoumission(rs.getDate("date_soumission"));
+                c.setStatutCandidature(rs.getString("statut_candidature"));
+                c.setCvId(rs.getInt("id_cv"));
+
+                c.setNom(rs.getString("nom"));
+                c.setPrenom(rs.getString("prenom"));
+                c.setPosteOccupe(rs.getString("poste_occupe"));
+                c.setCheminCv(rs.getString("chemin_fichier"));
+
+                list.add(c);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
 }

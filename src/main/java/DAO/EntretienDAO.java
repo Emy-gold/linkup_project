@@ -14,4 +14,12 @@ public interface EntretienDAO {
     List<Entretien> getByCandidatId(int candidatId);
     List<Entretien> getUpcomingByCandidatId(int candidatId, int limit);
     int countByCandidatId(int candidatId);
+
+
+    // Create Entretient By Candidature
+    void createEntretien(int candidatureId) throws Exception;
+
+    //Get Entretient By RecruteurId
+    List<Entretien> getByRecruteurId(int recruteurId) throws Exception;
+
 }

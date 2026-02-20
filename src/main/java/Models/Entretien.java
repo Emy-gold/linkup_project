@@ -14,6 +14,13 @@ public class Entretien {
     private int candidatureId;
 
 
+
+    // NOUVEAUX CHAMPS POUR L'AFFICHAGE
+    private String nom;
+    private String prenom;
+    private String titreAnnonce;
+
+
     public Entretien(){
 
     }
@@ -51,6 +58,10 @@ public class Entretien {
         return candidatureId;
     }
 
+    public String getNom() { return nom; }
+    public String getPrenom() { return prenom; }
+    public String getTitreAnnonce() { return titreAnnonce; }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -74,4 +85,8 @@ public class Entretien {
     public void setCandidatureId(int candidatureId) {
         this.candidatureId = candidatureId;
     }
+
+    public void setNom(String nom) { this.nom = nom; }
+    public void setPrenom(String prenom) { this.prenom = prenom; }
+    public void setTitreAnnonce(String titreAnnonce) { this.titreAnnonce = titreAnnonce; }
 }
