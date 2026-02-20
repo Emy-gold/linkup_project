@@ -19,7 +19,7 @@
                                     return;
                                     }
                                     if (universite == null) {
-                                    response.sendRedirect(request.getContextPath() + "/universite-select");
+                                    response.sendRedirect(request.getContextPath() + "/universite-complete-profile");
                                     return;
                                     }
 
@@ -515,18 +515,6 @@
                                                 <img src="<%= request.getContextPath() %>/assets/logo.png" alt="LinkUp">
                                             </div>
                                             <nav>
-                                                <a href="<%= request.getContextPath() %>/universite-select"
-                                                    class="nav-link">
-                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                        stroke-linejoin="round">
-                                                        <rect x="3" y="3" width="7" height="7"></rect>
-                                                        <rect x="14" y="3" width="7" height="7"></rect>
-                                                        <rect x="14" y="14" width="7" height="7"></rect>
-                                                        <rect x="3" y="14" width="7" height="7"></rect>
-                                                    </svg>
-                                                    Mes Universités
-                                                </a>
                                                 <a href="#" class="nav-link active">
                                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                                                         stroke="currentColor" stroke-width="2" stroke-linecap="round"

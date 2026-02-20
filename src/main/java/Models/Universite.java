@@ -8,18 +8,16 @@ public class Universite extends utilisateur {
     private String telephone;
     private String emailContact;
 
-    private String universityPassword;
 
     public Universite() {
     }
 
-    public Universite(int idUtilisateur, String email, String nom, String prenom, String password, Date date, String statutCompte, String nomUniversite, String adresse, String telephone, String emailContact, String universityPassword, String role) {
+    public Universite(int idUtilisateur, String email, String nom, String prenom, String password, Date date, String statutCompte, String nomUniversite, String adresse, String telephone, String emailContact, String role) {
         super(idUtilisateur, email, nom, prenom, password, date, statutCompte, role);
         this.nomUniversite = nomUniversite;
         this.adresse = adresse;
         this.telephone = telephone;
         this.emailContact = emailContact;
-        this.universityPassword = universityPassword;
     }
 
     // AJOUTER CE GETTER
@@ -59,11 +57,4 @@ public class Universite extends utilisateur {
         this.emailContact = emailContact;
     }
 
-    public String getUniversityPassword() {
-        return universityPassword;
-    }
-
-    public void setUniversityPassword(String universityPassword) {
-        this.universityPassword = universityPassword;
-    }
 }
