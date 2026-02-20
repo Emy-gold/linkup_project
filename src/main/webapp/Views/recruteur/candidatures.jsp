@@ -85,7 +85,7 @@
                     <thead class="bg-slate-50 border-b border-slate-200">
                     <tr>
                         <th class="px-6 py-4 text-left font-semibold text-slate-700">Candidat</th>
-                        <th class="px-6 py-4 text-left font-semibold text-slate-700">Poste</th>
+                        <th class="px-6 py-4 text-left font-semibold text-slate-700">Titre</th>
                         <th class="px-6 py-4 text-left font-semibold text-slate-700">Date</th>
                         <th class="px-6 py-4 text-left font-semibold text-slate-700">Statut</th>
                         <th class="px-6 py-4 text-left font-semibold text-slate-700">Actions</th>
@@ -115,7 +115,7 @@
 
                                     <!-- POSTE -->
                                     <td class="px-6 py-4 text-slate-600">
-                                            ${cand.posteOccupe}
+                                            ${cand.titreAnnonce}
                                     </td>
 
                                     <!-- DATE -->

@@ -16,7 +16,7 @@ public class Candidature {
     // NOUVEAUX CHAMPS POUR L'AFFICHAGE
     private String nom;
     private String prenom;
-    private String posteOccupe;
+    private String titreAnnonce;
     private String cheminCv;
 
     public Candidature(){}
@@ -41,7 +41,7 @@ public class Candidature {
 
     public String getNom() { return nom; }
     public String getPrenom() { return prenom; }
-    public String getPosteOccupe() { return posteOccupe; }
+    public String getTitreAnnonce() { return titreAnnonce; }
     public String getCheminCv() { return cheminCv; }
 
 
@@ -58,7 +58,7 @@ public class Candidature {
 
     public void setNom(String nom) { this.nom = nom; }
     public void setPrenom(String prenom) { this.prenom = prenom; }
-    public void setPosteOccupe(String posteOccupe) { this.posteOccupe = posteOccupe; }
+    public void setTitreAnnonce(String TitreAnnonce) { this.titreAnnonce = TitreAnnonce; }
     public void setCheminCv(String cheminCv) { this.cheminCv = cheminCv; }
 
     // AJOUT

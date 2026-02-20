@@ -91,9 +91,8 @@
                   class="bg-surface-light border border-slate-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
                   <div class="flex items-center justify-between">
                     <div>
-                      <p class="text-sm text-slate-600 font-medium">Candidats Sauvegardés</p>
-                      <p class="text-3xl font-bold text-slate-900 mt-2"><%--${totalCandidats !=null ? totalCandidats :
-                          0}--%></p>
+                      <p class="text-sm text-slate-600 font-medium">Entretiens Sauvegardés</p>
+                      <p class="text-3xl font-bold text-slate-900 mt-2">${entsCount !=null ? entsCount : 0}</p>
                     </div>
                     <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                       <i class="fas fa-users text-purple-600 text-xl"></i>
@@ -108,7 +107,7 @@
                     <div>
                       <p class="text-sm text-slate-600 font-medium">Taux d'Acceptation</p>
                       <p class="text-3xl font-bold text-slate-900 mt-2"><%--${acceptanceRate !=null ? acceptanceRate :
-                          0}%--%></p>
+                          0}%--%>0%</p>
                     </div>
                     <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
                       <i class="fas fa-chart-pie text-orange-600 text-xl"></i>
@@ -129,9 +128,9 @@
                     class="px-6 py-2 border border-primary text-primary hover:bg-primary/5 rounded-lg font-medium transition-colors flex items-center gap-2">
                     <i class="fas fa-inbox"></i> Voir les Candidatures
                   </a>
-                  <a href="${pageContext.request.contextPath}/recruteur/candidats"
+                  <a href="${pageContext.request.contextPath}/recruteur//recruteur/entretiens"
                     class="px-6 py-2 border border-primary text-primary hover:bg-primary/5 rounded-lg font-medium transition-colors flex items-center gap-2">
-                    <i class="fas fa-users"></i> Gérer les Candidats
+                    <i class="fas fa-comments w-5"></i> Voire les Entretiens
                   </a>
                 </div>
               </div>

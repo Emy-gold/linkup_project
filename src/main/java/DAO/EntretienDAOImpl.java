@@ -205,4 +205,34 @@ public class EntretienDAOImpl implements EntretienDAO {
 
         return list;
     }
+
+
+    @Override
+    public int countByRecruteurId(int recruteurId) {
+
+        int count = 0;
+
+        String sql = "SELECT COUNT(*) " +
+                "FROM entretien e " +
+                "JOIN candidature c ON e.id_candidature = c.id_candidature " +
+                "JOIN annonce a ON c.id_annonce = a.id_annonce " +
+                "WHERE a.id_recruteur = ?";
+
+        try (Connection con = ConnexionDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, recruteurId);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return count;
+    }
 }

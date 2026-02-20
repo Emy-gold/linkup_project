@@ -22,4 +22,7 @@ public interface EntretienDAO {
     //Get Entretient By RecruteurId
     List<Entretien> getByRecruteurId(int recruteurId) throws Exception;
 
+    //Count
+    int countByRecruteurId(int recruteurId);
+
 }

@@ -1,6 +1,7 @@
 package Controllers.recruteur;
 
 import DAO.AnnonceDAO;
+import DAO.EntretienDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,11 +16,13 @@ public class DashboardServlet extends HttpServlet {
 
     private AnnonceDAO annonceDAO;
     private DAO.CandidatureDAO candidatureDAO;
+    private EntretienDAO entretienDAO;
 
     @Override
     public void init() {
         annonceDAO = new DAO.AnnonceDAOImpl();
         candidatureDAO = new DAO.CandidatureDAOImpl();
+        entretienDAO = new DAO.EntretienDAOImpl();
     }
 
     @Override
@@ -36,9 +39,13 @@ public class DashboardServlet extends HttpServlet {
 
         int adsCount = annonceDAO.countByRecruteurId(recruteurId);
         int appsCount = candidatureDAO.countByRecruteurId(recruteurId);
+        int entsCount = entretienDAO.countByRecruteurId(recruteurId);
+
 
         request.setAttribute("adsCount", adsCount);
         request.setAttribute("appsCount", appsCount);
+        request.setAttribute("entsCount", entsCount);
+
 
         request.getRequestDispatcher("/Views/recruteur/dashboard.jsp").forward(request, response);
     }

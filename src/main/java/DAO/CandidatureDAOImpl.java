@@ -207,7 +207,7 @@ public class CandidatureDAOImpl implements CandidatureDAO {
 
         List<Candidature> list = new ArrayList<>();
 
-        String sql = "SELECT c.*, u.nom, u.prenom, r.poste_occupe, cv.chemin_fichier " +
+        String sql = "SELECT c.*, u.nom, u.prenom, a.titre, cv.chemin_fichier " +
                 "FROM candidature c " +
                 "JOIN annonce a ON c.id_annonce = a.id_annonce " +
                 "JOIN recruteur r ON a.id_recruteur = r.id_recruteur " +
@@ -235,10 +235,10 @@ public class CandidatureDAOImpl implements CandidatureDAO {
                 c.setStatutCandidature(rs.getString("statut_candidature"));
                 c.setCvId(rs.getInt("id_cv"));
 
-                // 🔥 champs supplémentaires
+                // champs supplémentaires
                 c.setNom(rs.getString("nom"));
                 c.setPrenom(rs.getString("prenom"));
-                c.setPosteOccupe(rs.getString("poste_occupe"));
+                c.setTitreAnnonce(rs.getString("titre"));
                 c.setCheminCv(rs.getString("chemin_fichier"));
 
                 list.add(c);
@@ -278,7 +278,7 @@ public class CandidatureDAOImpl implements CandidatureDAO {
 
         List<Candidature> list = new ArrayList<>();
 
-        String sql = "SELECT c.*, u.nom, u.prenom, r.poste_occupe, cv.chemin_fichier " +
+        String sql = "SELECT c.*, u.nom, u.prenom, a.titre, cv.chemin_fichier " +
                 "FROM candidature c " +
                 "JOIN annonce a ON c.id_annonce = a.id_annonce " +
                 "JOIN recruteur r ON a.id_recruteur = r.id_recruteur " +
@@ -308,7 +308,7 @@ public class CandidatureDAOImpl implements CandidatureDAO {
 
                 c.setNom(rs.getString("nom"));
                 c.setPrenom(rs.getString("prenom"));
-                c.setPosteOccupe(rs.getString("poste_occupe"));
+                c.setTitreAnnonce(rs.getString("titre"));
                 c.setCheminCv(rs.getString("chemin_fichier"));
 
                 list.add(c);
