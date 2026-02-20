@@ -128,7 +128,7 @@
                     class="px-6 py-2 border border-primary text-primary hover:bg-primary/5 rounded-lg font-medium transition-colors flex items-center gap-2">
                     <i class="fas fa-inbox"></i> Voir les Candidatures
                   </a>
-                  <a href="${pageContext.request.contextPath}/recruteur//recruteur/entretiens"
+                  <a href="${pageContext.request.contextPath}/recruteur/entretiens"
                     class="px-6 py-2 border border-primary text-primary hover:bg-primary/5 rounded-lg font-medium transition-colors flex items-center gap-2">
                     <i class="fas fa-comments w-5"></i> Voire les Entretiens
                   </a>
