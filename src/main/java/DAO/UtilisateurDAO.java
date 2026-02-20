@@ -25,4 +25,9 @@ public interface UtilisateurDAO {
 
     public utilisateur findById(int id) throws Exception;
 
+    public java.util.List<utilisateur> findAllEntitiesDetails() throws Exception;
+
+    public int getTotalCompanies() throws Exception;
+
+    public int getTotalUniversities() throws Exception;
 }
