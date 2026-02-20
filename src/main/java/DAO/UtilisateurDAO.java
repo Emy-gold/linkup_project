@@ -23,4 +23,6 @@ public interface UtilisateurDAO {
 
     public int countPendingEntities() throws Exception;
 
+    public utilisateur findById(int id) throws Exception;
+
 }

@@ -189,4 +189,26 @@ public class UtilisateurDaoIMP implements UtilisateurDAO {
         }
         return 0;
     }
+
+    @Override
+    public utilisateur findById(int id) throws Exception {
+        String sql = "SELECT * FROM utilisateur WHERE id_utilisateur=?";
+        Connection cn = ConnexionDB.getConnection();
+        PreparedStatement ps = cn.prepareStatement(sql);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            utilisateur u = new utilisateur();
+            u.setIdUtilisateur(rs.getInt("id_utilisateur"));
+            u.setEmail(rs.getString("email"));
+            u.setNom(rs.getString("nom"));
+            u.setPrenom(rs.getString("prenom"));
+            u.setRole(rs.getString("role"));
+            u.setStatutCompte(rs.getString("statut_compte"));
+            u.setDate(rs.getDate("date_inscription"));
+            return u;
+        }
+        return null;
+    }
 }

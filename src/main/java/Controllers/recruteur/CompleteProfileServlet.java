@@ -43,8 +43,14 @@ public class CompleteProfileServlet extends HttpServlet {
             return;
         }
 
-        // recuperer Forign key userId
-        int userId = (int) session.getAttribute("userId");
+        // Recuperer l'utilisateur depuis la session pour avoir l'ID correct
+        Models.utilisateur user = (Models.utilisateur) session.getAttribute("user");
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+        int userId = user.getIdUtilisateur();
+        System.out.println(">>> DEBUG : CompleteProfileServlet - Session récupérée pour userId=" + userId);
 
         String nomEntreprise = request.getParameter("nomEntreprise");
         String secteur = request.getParameter("secteurActivite");
@@ -52,6 +58,7 @@ public class CompleteProfileServlet extends HttpServlet {
         String poste = request.getParameter("posteOccupe");
 
         try {
+            System.out.println(">>> DEBUG : Preparation de l'objet Recruteur pour userId=" + userId);
             Recruteur r = new Recruteur();
             r.setUserId(userId);
             r.setNomEntreprise(nomEntreprise);
@@ -61,28 +68,32 @@ public class CompleteProfileServlet extends HttpServlet {
             r.setLogo(null);
 
             recruteurDAO.create(r);
+            System.out.println(">>> DEBUG : Profil recruteur créé avec succès.");
 
-            // Update user in session to reflect new status/role if changed (though mostly
-            // status)
-            Models.utilisateur updatedUser = new DAO.UtilisateurDaoIMP().login(
-                    ((Models.utilisateur) session.getAttribute("user")).getEmail(),
-                    ((Models.utilisateur) session.getAttribute("user")).getPassword()); // Re-login strictly to get
-                                                                                        // fresh object
+            // 1. Update user status in Database to 'ACTIF'
+            DAO.UtilisateurDAO userDAO = new DAO.UtilisateurDaoIMP();
+            userDAO.updateStatus(userId, "ACTIF");
+            System.out.println(">>> DEBUG : Statut utilisateur mis à jour vers 'ACTIF'.");
 
-            // Or better, just get by ID if possible, but login is safer to get full object
-            // state
+            // 2. Refresh User Object in Session
+            Models.utilisateur updatedUser = userDAO.findById(userId);
             if (updatedUser != null) {
+                System.out.println(">>> DEBUG : Utilisateur rafraîchi en session : " + updatedUser.getEmail()
+                        + " (Statut: " + updatedUser.getStatutCompte() + ")");
                 session.setAttribute("user", updatedUser);
-                // Also set the recruteur object in session so Dashboard doesn't reject us
-                // Actually, let's fetch the full recruteur object to be safe
+
+                // 3. Refresh Recruteur Object & IDs for Dashboard
                 Recruteur brandNewRecruteur = recruteurDAO.getByUserId(userId);
                 if (brandNewRecruteur != null) {
+                    System.out.println(">>> DEBUG : RecruteurId trouvé : " + brandNewRecruteur.getRecruteurId());
                     session.setAttribute("recruteur", brandNewRecruteur);
                     session.setAttribute("recruteurId", brandNewRecruteur.getRecruteurId());
                 }
             }
 
-            response.sendRedirect(request.getContextPath() + "/recruteur/dashboard");
+            String redirectUrl = request.getContextPath() + "/recruteur/dashboard";
+            System.out.println(">>> DEBUG : Redirection vers : " + redirectUrl);
+            response.sendRedirect(redirectUrl);
         } catch (Exception e) {
             e.printStackTrace();
 
