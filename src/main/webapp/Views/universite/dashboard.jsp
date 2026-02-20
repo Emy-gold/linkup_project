@@ -221,6 +221,20 @@
                                                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                                             }
 
+                                            .user-profile-link {
+                                                text-decoration: none;
+                                                color: inherit;
+                                                display: flex;
+                                                align-items: center;
+                                                padding: 5px 10px;
+                                                border-radius: 8px;
+                                                transition: background-color 0.2s;
+                                            }
+
+                                            .user-profile-link:hover {
+                                                background-color: var(--accent-color);
+                                            }
+
                                             /* Page Content */
                                             .page-content {
                                                 padding: 2.5rem;
@@ -553,18 +567,21 @@
                                                     <%= universite.getNomUniversite() %> (ID: <%=
                                                             universite.getIdUtilisateur() %>)
                                                 </div>
-                                                <div class="user-profile">
-                                                    <div class="user-info">
-                                                        <span class="user-name">
-                                                            <%= user.getPrenom() %>
-                                                                <%= user.getNom() %>
-                                                        </span>
-                                                        <span class="user-role">Administrateur Universitaire</span>
+                                                <a href="<%= request.getContextPath() %>/agent-profile"
+                                                    class="user-profile-link">
+                                                    <div class="user-profile">
+                                                        <div class="user-info">
+                                                            <span class="user-name">
+                                                                <%= user.getPrenom() %>
+                                                                    <%= user.getNom() %>
+                                                            </span>
+                                                            <span class="user-role">Administrateur Universitaire</span>
+                                                        </div>
+                                                        <div class="avatar">
+                                                            <%= user.getInitiales() %>
+                                                        </div>
                                                     </div>
-                                                    <div class="avatar">
-                                                        <%= user.getInitiales() %>
-                                                    </div>
-                                                </div>
+                                                </a>
                                             </header>
 
                                             <!-- Main Fluid Content -->

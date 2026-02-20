@@ -1,4 +1,4 @@
-package Controllers;
+package Controllers.universite;
 
 import DAO.UniversiteDAO;
 import DAO.UniversiteDAOImpl;
