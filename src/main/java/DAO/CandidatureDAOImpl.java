@@ -185,10 +185,27 @@ public class CandidatureDAOImpl implements CandidatureDAO {
     }
 
     @Override
+    public int countByRecruteurIdAndStatut(int recruteurId, String statut) {
+        String sql = "SELECT COUNT(*) FROM candidature c JOIN annonce a ON c.id_annonce = a.id_annonce WHERE a.id_recruteur = ? AND c.statut_candidature = ?";
+        try (Connection conn = ConnexionDB.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, recruteurId);
+            stmt.setString(2, statut);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
     public int countByRecruteurId(int recruteurId) {
         String sql = "SELECT COUNT(*) FROM candidature c JOIN annonce a ON c.id_annonce = a.id_annonce WHERE a.id_recruteur = ?";
         try (Connection conn = ConnexionDB.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, recruteurId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {

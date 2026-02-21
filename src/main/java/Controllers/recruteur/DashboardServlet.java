@@ -41,10 +41,17 @@ public class DashboardServlet extends HttpServlet {
         int appsCount = candidatureDAO.countByRecruteurId(recruteurId);
         int entsCount = entretienDAO.countByRecruteurId(recruteurId);
 
+        // Calcul du taux d'acceptation
+        int acceptedCount = candidatureDAO.countByRecruteurIdAndStatut(recruteurId, "Acceptee");
+        int acceptanceRate = 0;
+        if (appsCount > 0) {
+            acceptanceRate = (acceptedCount * 100) / appsCount;
+        }
 
         request.setAttribute("adsCount", adsCount);
         request.setAttribute("appsCount", appsCount);
         request.setAttribute("entsCount", entsCount);
+        request.setAttribute("acceptanceRate", acceptanceRate);
 
 
         request.getRequestDispatcher("/Views/recruteur/dashboard.jsp").forward(request, response);

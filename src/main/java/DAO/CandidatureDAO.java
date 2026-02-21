@@ -35,4 +35,6 @@ public interface CandidatureDAO {
     int countByCandidatId(int candidatId);
 
     int countByRecruteurId(int recruteurId);
+
+    int countByRecruteurIdAndStatut(int recruteurId, String statut);
 }

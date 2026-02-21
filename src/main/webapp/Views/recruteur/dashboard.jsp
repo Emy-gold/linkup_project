@@ -106,8 +106,8 @@
                   <div class="flex items-center justify-between">
                     <div>
                       <p class="text-sm text-slate-600 font-medium">Taux d'Acceptation</p>
-                      <p class="text-3xl font-bold text-slate-900 mt-2"><%--${acceptanceRate !=null ? acceptanceRate :
-                          0}%--%>0%</p>
+                      <p class="text-3xl font-bold text-slate-900 mt-2">${acceptanceRate != null ? acceptanceRate : 0}%
+                      </p>
                     </div>
                     <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
                       <i class="fas fa-chart-pie text-orange-600 text-xl"></i>
