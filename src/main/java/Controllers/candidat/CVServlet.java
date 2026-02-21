@@ -63,7 +63,7 @@ public class CVServlet extends HttpServlet {
                 }
 
                 // Create upload directory
-                String uploadPath = getServletContext().getRealPath("") + "uploads" + File.separator + "cvs";
+                String uploadPath = getServletContext().getRealPath("/uploads/cvs");
                 File uploadDir = new File(uploadPath);
                 if (!uploadDir.exists()) uploadDir.mkdirs();
 

@@ -92,7 +92,7 @@ public class ProfileServlet extends HttpServlet {
                 String universiteIdStr = req.getParameter("id_universite"); // ✅ AJOUT : Récupérer l'ID de l'université
                 Part filePart = req.getPart("documentJustificatif");
 
-                String uploadPath = getServletContext().getRealPath("") + "uploads" + File.separator + "diplomes";
+                String uploadPath = getServletContext().getRealPath("/uploads/diplomes");
                 File uploadDir = new File(uploadPath);
                 if (!uploadDir.exists()) {
                     uploadDir.mkdirs();

@@ -70,7 +70,7 @@ public class PostulerServlet extends HttpServlet {
             c.setAnnonceId(annonceId);
             c.setCvId(cvId); // ← AJOUT ICI
             c.setDateSoumission(new Date());
-            c.setStatutCandidature("En attente");
+            c.setStatutCandidature("En_attente");
             c.setLettreMotivation(lettreMotivation);
 
             // Save to database
