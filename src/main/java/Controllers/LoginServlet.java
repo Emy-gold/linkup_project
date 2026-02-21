@@ -81,15 +81,15 @@ public class LoginServlet extends HttpServlet {
                         }
                         break;
                     default:
-                        resp.sendRedirect("/login.jsp?error=invalid_role");
+                        resp.sendRedirect(req.getContextPath() + "/login.jsp?error=invalid_role");
                         break;
                 }
             } else {
-                resp.sendRedirect("login.jsp?error=true");
+                resp.sendRedirect(req.getContextPath() + "/login.jsp?error=true");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            resp.sendRedirect("login.jsp?error=server");
+            resp.sendRedirect(req.getContextPath() + "/login.jsp?error=server");
         }
     }
 }
