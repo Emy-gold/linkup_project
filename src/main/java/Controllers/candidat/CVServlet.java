@@ -4,6 +4,7 @@ import DAO.CVDAO;
 import DAO.CVDAOImpl;
 import Models.Cv;
 import Models.utilisateur;
+import Utils.FileUploadConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -63,7 +64,7 @@ public class CVServlet extends HttpServlet {
                 }
 
                 // Create upload directory
-                String uploadPath = getServletContext().getRealPath("/uploads/cvs");
+                String uploadPath = FileUploadConfig.UPLOAD_PATH_CVS;
                 File uploadDir = new File(uploadPath);
                 if (!uploadDir.exists()) uploadDir.mkdirs();
 

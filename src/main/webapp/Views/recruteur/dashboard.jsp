@@ -66,8 +66,8 @@
                       <p class="text-sm text-slate-600 font-medium">Annonces Publiées</p>
                       <p class="text-3xl font-bold text-slate-900 mt-2">${adsCount != null ? adsCount : 0}</p>
                     </div>
-                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <i class="fas fa-bullhorn text-blue-600 text-xl"></i>
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                      <i class="fas fa-bullhorn text-green-600 text-xl"></i>
                     </div>
                   </div>
                 </div>
@@ -95,7 +95,7 @@
                       <p class="text-3xl font-bold text-slate-900 mt-2">${entsCount !=null ? entsCount : 0}</p>
                     </div>
                     <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                      <i class="fas fa-users text-purple-600 text-xl"></i>
+                      <i class="fas fa-calendar-check text-purple-600 text-xl"></i>
                     </div>
                   </div>
                 </div>
@@ -130,7 +130,7 @@
                   </a>
                   <a href="${pageContext.request.contextPath}/recruteur/entretiens"
                     class="px-6 py-2 border border-primary text-primary hover:bg-primary/5 rounded-lg font-medium transition-colors flex items-center gap-2">
-                    <i class="fas fa-comments w-5"></i> Voire les Entretiens
+                    <i class="fas fa-calendar-check w-5"></i> Voir les Entretiens
                   </a>
                 </div>
               </div>

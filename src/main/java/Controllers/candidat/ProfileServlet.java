@@ -5,6 +5,7 @@ import Models.Universite;
 import Models.utilisateur;
 import Models.Candidat;
 import Models.Diplome;
+import Utils.FileUploadConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -92,7 +93,7 @@ public class ProfileServlet extends HttpServlet {
                 String universiteIdStr = req.getParameter("id_universite"); // ✅ AJOUT : Récupérer l'ID de l'université
                 Part filePart = req.getPart("documentJustificatif");
 
-                String uploadPath = getServletContext().getRealPath("/uploads/diplomes");
+                String uploadPath = FileUploadConfig.UPLOAD_PATH_DIPLOMES;
                 File uploadDir = new File(uploadPath);
                 if (!uploadDir.exists()) {
                     uploadDir.mkdirs();
